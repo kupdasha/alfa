@@ -257,6 +257,10 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-post.big .media{position:fixed;inset:auto;left:50%;top:50%;width:min(94vh,94vw);height:min(94vh,94vw);transform:translate(-50%,-50%);z-index:210;cursor:zoom-out;animation:al-zoomin .5s var(--ease)}
 @keyframes al-zoomin{from{opacity:0;transform:translate(-50%,-50%) scale(.9)}}
 .al-post .media video,.al-post .media .lg,.al-post .ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* порядок слоев задан явно: Safari рисует играющее видео поверх соседей, если у них нет своего слоя */
+.al-post .media video{z-index:0}
+.al-post .media .lg{z-index:1;transform:translateZ(0)}
+.al-post .ov{z-index:2;transform:translateZ(0)}
 .al-post footer .fs{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--ink)!important;color:#fff;display:grid;place-items:center;transition:transform .4s var(--ease)}
 .al-post footer{align-items:center}
 .al-post footer .fs svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none}
