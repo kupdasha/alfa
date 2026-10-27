@@ -159,7 +159,8 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
   <header><img class="av" src="img/adc-avatar.webp" alt="" width="56" height="56" loading="lazy"><b>Alfa Design Community</b></header>
   <div class="txt"><p class="h">${T(POST_TEXT[0])}</p><p class="body" title="показать целиком">${T(POST_TEXT[1])}</p></div>
   <div class="mwrap"><div class="media" title="крупно">
-    <video muted autoplay loop playsinline preload="none" poster="img/${video}.webp" data-src="img/${video}.mp4"></video>
+    <video muted autoplay loop playsinline preload="none" poster="img/${video}.webp" data-src="img/${video}.mp4" data-src-s="img/${video}-s.mp4"></video>
+    <span class="vid" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="ring" cx="24" cy="24" r="22"/><path d="M19 15l14 9-14 9z"/></svg></span>
     <img class="lg" src="img/${video}-logo.webp" alt="" loading="lazy" decoding="async">
     <svg class="ov ${v}" viewBox="0 0 1080 1080" fill="none" aria-hidden="true">${OV[v]}</svg>
   </div></div>
@@ -321,12 +322,24 @@ const vio = new IntersectionObserver(es => es.forEach(e => {
 
 // посты: ролик грузится, когда близко; анимация поверх идет, только пока пост на экране;
 // нажатие на текст раскрывает его целиком, кнопка в углу разворачивает ролик со слоями на весь экран
+// ролик поста начинает грузиться заранее, за пару экранов до поста; на телефоне — легкая версия 720 px.
+// Пока ролик не заиграл, в углу виден значок видео с бегущим кольцом — чтобы было понятно, что это ролик
+const preIO = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const v = e.target;
+  if (v.dataset.src) { v.src = innerWidth < 900 ? v.dataset.srcS : v.dataset.src; delete v.dataset.src; v.preload = 'auto'; v.load(); }
+  preIO.unobserve(v);
+}), { rootMargin: '1600px 0px' });
 ROOT.querySelectorAll('.al-post').forEach(post => {
-  vio.observe(post.querySelector('video'));
+  const pv = post.querySelector('video');
+  preIO.observe(pv); vio.observe(pv);
+  pv.addEventListener('playing', () => post.classList.add('playing'));
+  pv.addEventListener('pause', () => post.classList.remove('playing'));
+  post.querySelector('.vid').addEventListener('click', e => { e.stopPropagation(); pv.play().catch(() => {}); });
   new IntersectionObserver(([e]) => post.classList.toggle('on', e.isIntersecting), { threshold: .2 }).observe(post);
   post.querySelector('.body').addEventListener('click', e => e.currentTarget.classList.toggle('open'));
   const media = post.querySelector('.media');
-  const big = on => { post.classList.toggle('big', on); document.documentElement.style.overflow = on ? 'hidden' : ''; };
+  const big = on => { post.classList.toggle('big', on); document.documentElement.style.overflow = on ? 'hidden' : ''; if (on) pv.play().catch(() => {}); };
   media.addEventListener('click', e => { e.stopPropagation(); big(!post.classList.contains('big')); });
   // нажатие на затемненный фон (он рисуется самим постом) или на крестик закрывает крупный просмотр
   post.addEventListener('click', e => { if (post.classList.contains('big') && !e.target.closest('.media')) big(false); });
