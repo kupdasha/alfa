@@ -187,7 +187,7 @@ const PROCESS1 = `
   <div class="al-split">
     <div>${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
       ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
-    <div class="al-video"><video muted autoplay loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4"></video></div>
+    <div class="al-video"><video muted autoplay loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4" data-src-s="img/scene-s.mp4"></video><span class="vid" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="ring" cx="24" cy="24" r="22"/><path d="M19 15l14 9-14 9z"/></svg></span></div>
   </div>
   <div class="al-story">
     ${[['3D', ['p1-wire', 'p1-angles', 'r-black']],
@@ -316,8 +316,12 @@ ROOT.querySelectorAll('.rv').forEach(el => io.observe(el));
 /* ---------- ролик: грузится при раскрытии процесса, играет только на экране ---------- */
 const vio = new IntersectionObserver(es => es.forEach(e => {
   const v = e.target;
-  if (e.isIntersecting) { if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; v.load(); } v.play().catch(() => {}); }
-  else v.pause();
+  const wrap = v.parentElement;
+  if (e.isIntersecting) {
+    if (v.dataset.src) { v.src = innerWidth < 900 && v.dataset.srcS ? v.dataset.srcS : v.dataset.src; delete v.dataset.src; v.load(); }
+    // телефон может запретить автозапуск (энергосбережение) — тогда значок становится кнопкой «играть»
+    v.play().then(() => wrap.classList.remove('blocked')).catch(() => wrap.classList.add('blocked'));
+  } else v.pause();
 }), { rootMargin: '100px 0px' });
 
 // посты: ролик грузится, когда близко; анимация поверх идет, только пока пост на экране;
@@ -330,12 +334,16 @@ const preIO = new IntersectionObserver(es => es.forEach(e => {
   if (v.dataset.src) { v.src = innerWidth < 900 ? v.dataset.srcS : v.dataset.src; delete v.dataset.src; v.preload = 'auto'; v.load(); }
   preIO.unobserve(v);
 }), { rootMargin: '1600px 0px' });
+// значок на роликах: кольцо бежит, пока ролик грузится; исчезает, когда он заиграл; нажатие — запуск
+ROOT.querySelectorAll('.vid').forEach(b => {
+  const v = b.parentElement.querySelector('video'), wrap = b.parentElement;
+  v.addEventListener('playing', () => wrap.classList.add('playing'));
+  v.addEventListener('pause', () => wrap.classList.remove('playing'));
+  b.addEventListener('click', e => { e.stopPropagation(); v.play().then(() => wrap.classList.remove('blocked')).catch(() => {}); });
+});
 ROOT.querySelectorAll('.al-post').forEach(post => {
   const pv = post.querySelector('video');
   preIO.observe(pv); vio.observe(pv);
-  pv.addEventListener('playing', () => post.classList.add('playing'));
-  pv.addEventListener('pause', () => post.classList.remove('playing'));
-  post.querySelector('.vid').addEventListener('click', e => { e.stopPropagation(); pv.play().catch(() => {}); });
   new IntersectionObserver(([e]) => post.classList.toggle('on', e.isIntersecting), { threshold: .2 }).observe(post);
   post.querySelector('.body').addEventListener('click', e => e.currentTarget.classList.toggle('open'));
   const media = post.querySelector('.media');
