@@ -69,61 +69,87 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-top nav a.on::after{transform:none}
 @media (max-width:640px){.al-top .home{display:none}.al-top nav{width:100%;justify-content:space-between;gap:12px}.al-top nav span{display:none}}
 
-/* ---------- первый экран и задание ---------- */
-.al-hero{padding-top:clamp(120px,16vh,200px)}
-.al-hero .al-h1{max-width:21ch}
-.al-hero-vis{margin-top:var(--gap);display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.al-hero-vis a{display:block}
-.al-hero-vis b{display:inline-flex;align-items:center;gap:10px;margin-top:14px;font-weight:500;font-size:clamp(17px,1.3vw,20px)}
-.al-hero-vis b::after{content:"";width:18px;height:2px;background:currentColor;transition:width .5s var(--ease)}
-@media (hover:hover){.al-hero-vis a:hover b::after{width:36px}.al-hero-vis a:hover img{transform:scale(1.025)}}
-@media (max-width:640px){.al-hero-vis{grid-template-columns:1fr}}
-.al-task{margin-top:clamp(40px,5vw,80px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.al-task-row{display:flex;align-items:center;gap:clamp(12px,2vw,32px);width:100%;min-height:72px;padding:16px 0;text-align:left}
-.al-task-row span{font-weight:500;font-size:clamp(18px,1.4vw,22px)}
-.al-task-row b{flex:1;font-weight:400;font-size:clamp(16px,1.2vw,20px);color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pm{position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:var(--ink);transition:transform .5s var(--ease),background .3s}
+/* ---------- первый экран: имя и «тестовое задание» крупно, остальное мельче ---------- */
+.al-hero{padding-top:clamp(120px,15vh,180px)}
+.al-title{display:block}
+.al-title .big{display:block;font-weight:500;font-size:clamp(56px,8.4vw,152px);line-height:.9;letter-spacing:-.045em}
+.al-title .sub{display:block;max-width:42ch;margin-top:clamp(20px,2vw,32px);font-weight:400;font-size:clamp(22px,2vw,34px);line-height:1.2;letter-spacing:-.015em;color:var(--mute);text-wrap:balance}
+
+/* ---------- раскрывающиеся строки: задача и процесс ---------- */
+.al-fold{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.al-task{margin-top:clamp(40px,5vw,80px)}
+.al-sec .al-fold{margin-top:clamp(72px,8vw,136px)}
+.al-fold-row{display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%;min-height:80px;padding:18px 0;text-align:left}
+.al-fold-row span{font-weight:500;font-size:clamp(22px,2vw,32px);letter-spacing:-.02em}
+.pm{position:relative;flex:none;width:48px;height:48px;border-radius:50%;background:var(--ink);transition:transform .5s var(--ease),background .3s}
 .pm::before,.pm::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:2px;margin:-1px 0 0 -8px;background:#fff;border-radius:2px;transition:transform .5s var(--ease)}
 .pm::after{transform:rotate(90deg)}
 [aria-expanded="true"] .pm{transform:rotate(180deg)}
 [aria-expanded="true"] .pm::after{transform:rotate(180deg)}
-@media (hover:hover){button:hover>.pm{background:#000}}
-.al-task-body,.al-faq .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .7s var(--ease)}
-.al-task-body.open,.al-faq .ans.open{grid-template-rows:1fr}
-.al-task-body>.in,.al-faq .ans>.in{overflow:hidden;min-height:0;opacity:0;transform:translateY(-8px);transition:opacity .5s,transform .6s var(--ease)}
-.al-task-body.open>.in,.al-faq .ans.open>.in{opacity:1;transform:none;transition-delay:.12s}
-.al-task-body .in{padding-bottom:0}
-.al-task-body.open .in{padding-bottom:clamp(32px,4vw,64px)}
+@media (hover:hover){button:hover>.pm{background:#000;transform:scale(1.06)}[aria-expanded="true"]:hover>.pm{transform:rotate(180deg) scale(1.06)}}
+.al-fold-body,.al-faq .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .8s var(--ease)}
+.al-fold-body.open,.al-faq .ans.open{grid-template-rows:1fr}
+.al-fold-body>.in,.al-faq .ans>.in{overflow:hidden;min-height:0;opacity:0;transform:translateY(-10px);transition:opacity .5s,transform .7s var(--ease)}
+.al-fold-body.open>.in,.al-faq .ans.open>.in{opacity:1;transform:none;transition-delay:.12s}
+.al-fold-body.open>.in{padding:clamp(16px,2vw,32px) 0 clamp(40px,5vw,80px)}
 .al-two{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(28px,5vw,96px);padding-top:clamp(16px,2vw,32px);align-items:start}
 .al-analysis{padding-top:clamp(48px,6vw,96px)}
 .al .al-analysis .al-h3{margin:0 0 20px}
-.al-items{margin-top:clamp(24px,2.4vw,40px);display:grid;gap:0;border-top:1px solid var(--line)}
+.al-items{margin-top:clamp(24px,2.4vw,40px);display:grid;border-top:1px solid var(--line)}
 .al-items li{font-size:clamp(17px,1.25vw,20px);line-height:1.45;padding:16px 0 16px 34px;border-bottom:1px solid var(--line);position:relative;text-wrap:pretty}
 .al-items li::before{content:"";position:absolute;left:4px;top:calc(16px + .72em - 6px);width:12px;height:12px;background:var(--red)}
 .al-items.plain{margin-top:0}
 .al-brief{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 .al-brief .wide{grid-column:span 2}
 
+/* ---------- карточки вариантов: переливающиеся градиенты в цветах Альфы ---------- */
+.al-cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-top:var(--gap)}
+.al-card{position:relative;display:flex;align-items:flex-end;aspect-ratio:16/10;overflow:hidden;isolation:isolate;padding:clamp(24px,3vw,48px)}
+.al-card b{position:relative;z-index:1;display:inline-flex;align-items:center;gap:14px;font-weight:500;font-size:clamp(28px,3vw,52px);letter-spacing:-.03em;line-height:1}
+.al-card b::after{content:"";width:28px;height:3px;background:currentColor;transition:width .6s var(--ease)}
+@media (hover:hover){.al-card:hover b::after{width:56px}.al-card:hover .g{transform:scale(1.08)}}
+.al-card .g{position:absolute;inset:-20%;z-index:-1;filter:blur(clamp(40px,5vw,80px));transition:transform 1.2s var(--ease)}
+.al-card .g i{position:absolute;width:62%;aspect-ratio:1;border-radius:50%;animation:al-drift 14s ease-in-out infinite alternate}
+.al-card .g i:nth-child(1){left:-6%;top:28%;animation-duration:13s}
+.al-card .g i:nth-child(2){left:38%;top:50%;animation-duration:17s;animation-delay:-4s}
+.al-card .g i:nth-child(3){left:46%;top:-8%;animation-duration:15s;animation-delay:-8s}
+.al-card .g i:nth-child(4){left:14%;top:-16%;width:40%;animation-duration:19s;animation-delay:-2s}
+.al-card.dark{background:#060608;color:#fff}
+.al-card.dark .g i:nth-child(1){background:#3BFFA9;opacity:.55;width:44%;left:-10%;top:58%}
+.al-card.dark .g i:nth-child(2){background:#7B2FF7;opacity:.7;width:46%}
+.al-card.dark .g i:nth-child(3){background:#2A5BEF;opacity:.45;width:36%;left:70%;top:62%}
+.al-card.dark .g i:nth-child(4){background:#060608;width:70%;left:10%;top:-20%}
+.al-card.light{background:#E7ECF3;color:var(--ink)}
+.al-card.light .g i:nth-child(1){background:#A8F7D6}
+.al-card.light .g i:nth-child(2){background:#C9B6FF}
+.al-card.light .g i:nth-child(3){background:#B6D4FF}
+.al-card.light .g i:nth-child(4){background:#F2F5F9}
+@keyframes al-drift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(18%,-12%) scale(1.15)}66%{transform:translate(-14%,10%) scale(.92)}100%{transform:translate(10%,16%) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.al-card .g i{animation:none}}
+
 /* ---------- главы ---------- */
 .al-sec{padding-top:clamp(120px,14vw,240px)}
-.al-sub{padding-top:clamp(96px,11vw,180px)}
 .al-head{margin-bottom:clamp(32px,4vw,64px)}
+.al .al-h4{font-weight:500;font-size:clamp(20px,1.7vw,28px);line-height:1.15;letter-spacing:-.015em;margin:clamp(48px,5vw,80px) 0 clamp(16px,1.6vw,24px)}
+.al-fold .al-h3:not(.first){margin-top:clamp(80px,9vw,144px)}
 .al-tx{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);margin:0 0 clamp(28px,3vw,48px)}
 .al-tx>*{grid-column:1}
-.al-tx-r>*{grid-column:2}
 .al-tx-r{grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:clamp(72px,8vw,136px)}
 .al-tx-r>*{grid-column:2}
 .al-tx-r .al-lead+.al-p{margin-top:1em}
 .al-wide{margin-bottom:var(--gap)}
-.al-wide+.al-tx,.al-row+.al-tx,.al-video+.al-tx{margin-top:clamp(56px,6vw,104px)}
+.al-wide+.al-tx,.al-jr+.al-tx{margin-top:clamp(56px,6vw,104px)}
 .al-covers{margin-top:clamp(32px,4vw,56px)}
 .al-covers+.al-covers{margin-top:var(--gap)}
 .al-pair{display:grid;grid-template-columns:minmax(0,1.7778fr) minmax(0,1fr);gap:var(--gap)}
 .al-covers .al-cap{max-width:56ch;margin-top:14px}
-.al-row{display:grid;gap:var(--gap);margin-top:var(--gap)}
-.al-row.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.al-row.r4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.al-row .al-ph{aspect-ratio:16/9}
+/* ряд одной высоты: ширина ячейки — по пропорциям картинки */
+.al-jr{display:flex;gap:var(--gap);margin-top:var(--gap)}
+.al-jr>div{flex:var(--r) 1 0;min-width:0}
+.al-jr .al-ph{width:100%}
+.al-jr .ai{display:flex;flex-direction:column;gap:var(--gap)}
+.al-jr .ai .al-ph{flex:1;aspect-ratio:auto;min-height:0}
+.al-jr .ai .al-cap{flex:none}
 
 /* ---------- переключатель языка ---------- */
 .al-lang{display:flex;align-items:center;gap:clamp(16px,2vw,32px);margin-bottom:clamp(16px,1.6vw,24px);flex-wrap:wrap}
@@ -131,77 +157,62 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-switch{display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 18px;border-radius:999px;background:var(--soft);font-weight:500;font-size:16px}
 .al-switch .o{transition:color .3s;color:var(--ink)}
 .al-switch[aria-checked="true"] .o:first-child,.al-switch[aria-checked="false"] .o:last-child{color:var(--mute)}
-.al-switch .track{position:relative;width:48px;height:28px;border-radius:99px;background:var(--ink);transition:background .3s}
+.al-switch .track{position:relative;width:48px;height:28px;border-radius:99px;background:var(--ink)}
 .al-switch .track i{position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .45s var(--spring)}
 .al-switch[aria-checked="true"] .track i{transform:translateX(20px)}
 .al-flip img.en{opacity:0;transform:scale(1.02);transition:opacity .6s var(--ease),transform .9s var(--ease)}
 .al-flip.is-en img.en{opacity:1;transform:none}
 
 /* ---------- пайплайн: Claude → Blender → Higgsfield → Figma ---------- */
-.al-pipe{display:flex;align-items:flex-start;justify-content:space-between;margin:0 0 clamp(48px,6vw,96px);padding:clamp(24px,3vw,48px) 0}
-.al-pipe .st{display:flex;flex-direction:column;align-items:center;gap:16px;flex:none;width:clamp(76px,9vw,140px)}
-.al-pipe .ic{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:28%;background:var(--soft);color:var(--ink);animation:al-step 6.4s var(--ease) infinite;animation-delay:calc(var(--i) * 1.6s)}
-.al-pipe .ic svg{width:46%;height:46%}
+.al-pipe{display:flex;align-items:flex-start;justify-content:space-between;margin:clamp(16px,2vw,32px) 0 clamp(56px,6vw,96px)}
+.al-pipe .st{display:flex;flex-direction:column;align-items:center;gap:16px;flex:none;width:clamp(84px,8vw,128px)}
+.al-pipe .ic{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:23%;overflow:hidden;animation:al-step 6.4s var(--ease) infinite;animation-delay:calc(var(--i) * 1.6s)}
+.al-pipe .ic svg{width:52%;height:52%}
+.al-pipe .ic img{width:100%;height:100%}
 .al-pipe b{font-weight:500;font-size:clamp(16px,1.3vw,20px)}
-.al-pipe .ln{flex:1;height:2px;margin-top:calc(clamp(76px,9vw,140px) / 2);background:var(--line);position:relative;overflow:hidden}
-.al-pipe .ln i{position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;animation:al-flow 6.4s var(--ease) infinite}
+.al-pipe .ln{flex:1;height:2px;margin:calc(clamp(84px,8vw,128px) / 2) 20px 0;background:var(--line);position:relative;overflow:hidden}
+.al-pipe .ln i{position:absolute;inset:0;background:var(--ink);transform:scaleX(0);animation:al-flow 6.4s var(--ease) infinite}
 .al-pipe .ln:nth-of-type(1) i{animation-delay:.5s}
 .al-pipe .ln:nth-of-type(2) i{animation-delay:2.1s}
 .al-pipe .ln:nth-of-type(3) i{animation-delay:3.7s}
-@keyframes al-step{0%,100%{background:var(--soft);color:var(--ink);transform:none}4%,18%{background:var(--ink);color:#fff;transform:translateY(-8px)}26%{background:var(--soft);color:var(--ink);transform:none}}
+@keyframes al-step{0%,26%,100%{transform:none;box-shadow:0 0 0 rgba(18,19,20,0)}6%,18%{transform:translateY(-10px) scale(1.04);box-shadow:0 18px 32px rgba(18,19,20,.18)}}
 @keyframes al-flow{0%{transform:scaleX(0);transform-origin:left}14%{transform:scaleX(1);transform-origin:left}15%{transform:scaleX(1);transform-origin:right}26%,100%{transform:scaleX(0);transform-origin:right}}
 
-/* ---------- ролик и мозаика процесса ---------- */
-.al-video{background:#0A0B0C;aspect-ratio:1.346;max-height:88vh;margin:0 auto var(--gap);overflow:hidden}
+/* ---------- текст и ролик рядом ---------- */
+.al-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,96px);align-items:center;margin-bottom:clamp(48px,5vw,80px)}
+.al-video{background:#0A0B0C;aspect-ratio:1.346;overflow:hidden}
 .al-video video{width:100%;height:100%;object-fit:cover}
-.al-mos{display:grid;grid-template-columns:minmax(0,1.7778fr) minmax(0,.884fr);gap:var(--gap)}
-.al-mos .c{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--gap) clamp(24px,4vw,64px);align-items:end;margin-top:clamp(40px,5vw,80px)}
-.al-ai{display:grid;grid-template-columns:minmax(0,1.38fr) minmax(0,1.62fr);gap:var(--gap)}
-.al-mos .c .al-cap{grid-column:2;grid-row:1;align-self:end;max-width:32ch}
-.al-mos .c .al-ai{grid-column:1;grid-row:1}
-.al-mos+.al-row{margin-top:clamp(40px,5vw,80px)}
 
-/* ---------- HUD kit: лента элементов ---------- */
-.al-hud{overflow:hidden;margin-top:clamp(8px,1vw,16px);padding:clamp(32px,4vw,64px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.al-hud .track{display:flex;width:max-content;min-height:clamp(120px,16vw,260px)}
-.al-hud.go .track{animation:al-hud 70s linear infinite}
-.al-hud .set{display:flex;align-items:center;gap:clamp(28px,3.4vw,56px);padding-right:clamp(28px,3.4vw,56px)}
-.al-hud .it{flex:none;display:block;zoom:1.7;animation:al-blink 4.2s ease-in-out infinite;animation-delay:var(--d)}
+/* ---------- HUD kit: все элементы на виду, каждый живет на месте ---------- */
+.al-hud{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-auto-flow:dense;align-items:center;justify-items:center;gap:clamp(40px,4vw,64px) clamp(16px,1.6vw,28px);margin-top:clamp(24px,3vw,48px);padding:clamp(40px,4vw,72px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);min-height:200px}
+.al-hud .it{display:block;zoom:var(--z,1.35);grid-column:span var(--s,1);animation:al-blink 3.6s ease-in-out infinite;animation-delay:var(--d)}
 .al-hud .it svg{overflow:visible}
-.al-hud .it:nth-child(3n) {animation-name:al-nudge}
-.al-hud .it:nth-child(5n) {animation-name:al-pop}
-@keyframes al-hud{to{transform:translateX(-50%)}}
-@keyframes al-blink{0%,100%{opacity:1}46%{opacity:1}50%{opacity:.15}54%{opacity:1}}
-@keyframes al-nudge{0%,100%{transform:none}50%{transform:translateY(-10px)}}
-@keyframes al-pop{0%,70%,100%{transform:none}80%{transform:scale(1.18)}}
-@media (prefers-reduced-motion:reduce){.al-hud .track,.al-hud .it{animation:none!important}.al-hud{overflow-x:auto}}
+.al-hud .a1{animation-name:al-nudge}
+.al-hud .a2{animation-name:al-pop}
+.al-hud .a3{animation-name:al-scan;animation-duration:3.2s}
+@keyframes al-blink{0%,40%,60%,100%{opacity:1}46%{opacity:.15}52%{opacity:1}55%{opacity:.3}}
+@keyframes al-nudge{0%,100%{transform:none}50%{transform:translateY(-8px)}}
+@keyframes al-pop{0%,60%,100%{transform:none}75%{transform:scale(1.2)}}
+@keyframes al-scan{0%{clip-path:inset(0 100% 0 0)}35%,75%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 0 100%)}}
+@media (prefers-reduced-motion:reduce){.al-hud .it{animation:none!important}}
 
-/* ---------- логотип ⇄ схема ---------- */
-.al-morph{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,6vw,120px);align-items:center;padding:clamp(40px,5vw,88px) clamp(24px,4vw,72px);background:var(--soft);margin-bottom:clamp(56px,7vw,112px)}
+/* ---------- логотип ⇄ схема: крупно по центру ---------- */
+.al-morph{display:flex;flex-direction:column;align-items:center;gap:clamp(32px,4vw,56px);text-align:center;padding:clamp(24px,4vw,64px) 0 0;margin-bottom:clamp(72px,8vw,136px)}
+.al-morph .vis{width:min(100%,1080px)}
+.al-morph .al-lead{max-width:34ch;text-wrap:balance}
 .al-morph-svg{width:100%;height:auto;overflow:visible}
-.al-morph .c{fill:#EF3124;transition:fill .8s var(--ease)}
-.al-morph .alfa{fill:#fff;transition:opacity .45s,transform .6s var(--ease);transform-box:fill-box;transform-origin:center}
-.al-morph .pill{fill:#3BFFA9;transition:fill .8s var(--ease) .08s}
-.al-morph .letters path{fill:#000;transform-box:fill-box;transform-origin:center;transition:opacity .45s,transform .7s var(--ease)}
-.al-morph .shapes path{transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.4) rotate(-12deg);transition:opacity .45s,transform .8s var(--spring)}
+.al-morph .c{fill:#EF3124;transition:fill .5s var(--ease)}
+.al-morph .alfa{fill:#fff;transition:opacity .35s,transform .5s var(--ease);transform-box:fill-box;transform-origin:center}
+.al-morph .pill{fill:#3BFFA9;transition:fill .5s var(--ease) .05s}
+.al-morph .letters path{fill:#000;transform-box:fill-box;transform-origin:center;transition:opacity .3s,transform .5s var(--ease)}
+.al-morph .shapes path{transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.4) rotate(-12deg);transition:opacity .3s,transform .6s var(--spring)}
 .al-morph .s1{fill:#9330D0}.al-morph .s2{fill:#2A77EF}.al-morph .s3{fill:#3BFFA9}
-.al-morph .letters .l2,.al-morph .shapes .s2{transition-delay:.12s}
-.al-morph .letters .l3,.al-morph .shapes .s3{transition-delay:.24s}
+.al-morph .letters .l2,.al-morph .shapes .s2{transition-delay:.08s}
+.al-morph .letters .l3,.al-morph .shapes .s3{transition-delay:.16s}
 .al-morph.scheme .c,.al-morph.scheme .pill{fill:#2B2C2C}
 .al-morph.scheme .alfa{opacity:0;transform:scale(.5)}
 .al-morph.scheme .letters path{opacity:0;transform:scale(1.3)}
 .al-morph.scheme .shapes path{opacity:1;transform:none}
-.al-steps{display:flex;gap:10px;margin-top:clamp(24px,3vw,40px)}
-.al-steps button{position:relative;overflow:hidden;height:44px;padding:0 20px;border-radius:999px;background:#fff;font-weight:500;font-size:16px;color:var(--mute);transition:color .3s,background .3s}
-.al-steps button.on{background:var(--ink);color:#fff}
-.al-steps button i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--green);transform:scaleX(0);transform-origin:left}
-.al-steps button.run i{animation:al-run 3.2s linear forwards}
-@keyframes al-run{to{transform:scaleX(1)}}
-
-/* ---------- детали ---------- */
-.al-det{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap);margin-top:var(--gap)}
-.al-det .big{grid-column:1 / -1}
-.al-det .al-ph:not(.big){background:#000}
 
 /* ---------- вопросы ---------- */
 .al-faq{border-top:1px solid var(--line);max-width:1100px}
@@ -212,21 +223,22 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-faq .ans.open .in{padding-bottom:clamp(24px,3vw,40px)}
 
 /* ---------- финал: такси ---------- */
-.al-end{padding-top:clamp(120px,14vw,240px);overflow:hidden}
-.al-end .al-h1{max-width:13ch}
-.al-end .road{position:relative;margin-top:clamp(24px,3vw,48px);height:clamp(220px,30vw,440px)}
-.al-end .scene{position:absolute;left:0;bottom:calc(clamp(30px,3.6vw,56px) - 2px);width:clamp(260px,34vw,560px);transform:translateX(-110%);transition:transform 2.6s cubic-bezier(.25,.9,.3,1)}
+.al-end{padding-top:clamp(96px,10vw,176px);overflow:hidden}
+.al-end .al-h1{white-space:nowrap}
+.al-end .road{position:relative;margin-top:clamp(8px,1vw,16px);height:clamp(220px,26vw,400px)}
+.al-end .scene{position:absolute;left:0;bottom:calc(clamp(30px,3.6vw,56px) - 2px);width:clamp(260px,30vw,500px);transform:translateX(-110%);transition:transform 2.6s cubic-bezier(.25,.9,.3,1)}
 .al-end.drive .scene{transform:translateX(calc(50vw - 50%))}
 .al-taxi{width:100%;height:auto;overflow:visible}
 .al-taxi .car{animation:al-bob .5s ease-in-out infinite alternate}
 .al-taxi .bear{transform-box:fill-box;transform-origin:50% 100%;animation:al-nod 2.4s ease-in-out infinite}
 .al-taxi .wheel{animation:al-spin .45s linear infinite}
-.al-taxi .eye{animation:al-look 5s ease-in-out infinite}
+.al-taxi .pupil{transition:transform .25s var(--ease)}
+.al-taxi .lid{animation:al-wink 5s ease-in-out infinite;transform-box:fill-box;transform-origin:top}
 .al-end .road::before{content:"";position:absolute;left:0;right:0;bottom:clamp(30px,3.6vw,56px);height:6px;background:#E4E5E8}
 @keyframes al-bob{to{transform:translateY(3px)}}
 @keyframes al-nod{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
 @keyframes al-spin{to{transform:rotate(360deg)}}
-@keyframes al-look{0%,40%,100%{transform:none}50%,90%{transform:translateX(3px)}}
+@keyframes al-wink{0%,92%,100%{transform:none}95%{transform:scaleY(2.2)}}
 .al-end .asphalt{position:absolute;left:0;right:0;bottom:0;height:clamp(30px,3.6vw,56px);background:var(--ink);overflow:hidden}
 .al-end .asphalt i{position:absolute;left:0;top:50%;width:200%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#fff 0 56px,transparent 56px 112px);animation:al-road .5s linear infinite}
 @keyframes al-road{to{transform:translateX(-112px)}}
@@ -236,6 +248,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 /* ---------- наверх и крупный просмотр ---------- */
 .al-up{position:fixed;right:var(--pad);bottom:24px;z-index:70;width:56px;height:56px;border-radius:50%;background:var(--ink)!important;color:#fff!important;display:grid;place-items:center;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .4s,transform .5s var(--ease)}
 .al-up.on{opacity:1;transform:none;pointer-events:auto}
+@media (hover:hover){.al-up:hover{background:#000!important}}
 .al-up svg{width:26px;height:26px}
 .al-box{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:clamp(12px,3vw,48px);background:rgba(255,255,255,.97);opacity:0;transition:opacity .3s;cursor:zoom-out}
 .al-box[hidden]{display:none}
@@ -244,34 +257,4 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-box.on img{transform:none}
 .al-box button{position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
 .al-box button svg{width:22px;height:22px}
-
-/* ---------- планшет ---------- */
-@media (max-width:1000px){
-  .al-two,.al-tx,.al-tx-r,.al-morph{grid-template-columns:minmax(0,1fr)}
-  .al-tx>*,.al-tx-r>*{grid-column:1}
-  .al-tx-r{margin-top:clamp(56px,8vw,96px)}
-  .al-row.r4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .al-mos .c{grid-template-columns:minmax(0,1fr)}
-  .al-mos .c .al-cap{grid-column:1;grid-row:2}
-}
-/* ---------- телефон ---------- */
-@media (max-width:640px){
-  .al .al-hero .al-h1{font-size:clamp(30px,9.2vw,40px)}
-  .al-hud .it{zoom:1}
-  .al-wide .sc{overflow-x:auto;margin:0 calc(var(--pad) * -1);padding:0 var(--pad);scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .al-wide .sc::-webkit-scrollbar{display:none}
-  .al-wide .sc .al-ph{width:220%}
-  .al-task-row b{display:none}
-  .al-task-row span{flex:1}
-  .al-pair{grid-template-columns:minmax(0,1fr)}
-  .al-row.r3{grid-template-columns:minmax(0,1fr)}
-  .al-row.r4{grid-template-columns:minmax(0,1fr)}
-  .al-mos{grid-template-columns:minmax(0,1fr)}
-  .al-det{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .al-pipe .st{width:64px;gap:10px}
-  .al-pipe .ln{margin-top:31px}
-  .al-pipe b{font-size:16px}
-  .al-pipe{margin-left:-6px;margin-right:-6px}
-  .al-end .scene{width:min(78vw,340px)}
-  .al-up{width:52px;height:52px;bottom:16px}
-}
+/* адаптив для планшета и телефона — в финальной версии */

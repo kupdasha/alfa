@@ -7,11 +7,12 @@ const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // пропорции картинок (ширина к высоте) — чтобы место под картинку было до загрузки
 const R = {"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
 
-/* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы ---------- */
-const SHORT = 'без|для|изо|над|под|про|при|что|как|или|его|уже|все|это|чем|где|кто|еще|ещё|так|нет|чтобы|если|когда|либо|хотя|ведь|пока|через|перед|после|между|около|среди|кроме|вроде';
+/* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы; ё → е (кроме фразы про «приёмку») ---------- */
+const SHORT = 'без|для|изо|над|под|про|при|что|как|или|его|уже|все|это|чем|где|кто|еще|так|нет|чтобы|если|когда|либо|хотя|ведь|пока|через|перед|после|между|около|среди|кроме|вроде';
 function ty(input, tail = true) {
   const NB = ' ';
   let s = String(input);
+  if (!/приёмк/.test(s)) s = s.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
   s = s.replace(/(^|[\s (\[—-])"/g, '$1«').replace(/"/g, '»');
   s = s.replace(/(\d)\s*[хx]\s*(\d)/g, '$1×$2');                       // 1920×1080
   s = s.replace(/[ \t]+[-–—][ \t]+/g, NB + '— ');                       // тире держится за слово слева
@@ -38,15 +39,20 @@ function pic(name, { alt = '', cls = '', eager = false, zoom = true, ratio } = {
     <img src="img/${name}-s.webp" srcset="img/${name}-s.webp 900w, img/${name}.webp 1920w" sizes="(max-width: 900px) 100vw, 60vw"
       alt="${alt}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></figure>`;
 }
-const head = (h, id, sub = '') => `<header class="al-head rv"${id ? ` id="${id}"` : ''}>${sub ? `<span class="al-eyebrow">${sub}</span>` : ''}<h2 class="al-h2">${T(h)}</h2></header>`;
+const head = (h, id) => `<header class="al-head rv"${id ? ` id="${id}"` : ''}><h2 class="al-h2">${T(h)}</h2></header>`;
+// раскрывающийся блок в одну строку — как задача
+const fold = (label, inner, cls = '') => `<div class="al-fold rv ${cls}">
+  <button class="al-fold-row" aria-expanded="false"><span>${T(label)}</span><i class="pm" aria-hidden="true"></i></button>
+  <div class="al-fold-body"><div class="in">${inner}</div></div></div>`;
+// ряд картинок одной высоты: ширина каждой — по ее пропорциям
+const row = (names) => `<div class="al-jr">${names.map(n => `<div style="--r:${R[n]}">${pic(n)}</div>`).join('')}</div>`;
 
-/* ---------- значки программ для инфографики пайплайна (рисованные, одним цветом) ---------- */
-const ICONS = {
-  claude: '<svg viewBox="0 0 48 48"><g stroke="currentColor" stroke-width="4.2" stroke-linecap="round">' +
-    Array.from({ length: 12 }, (_, i) => { const a = i * Math.PI / 6, l = i % 2 ? 15 : 20; return `<line x1="${24 + Math.cos(a) * 5}" y1="${24 + Math.sin(a) * 5}" x2="${(24 + Math.cos(a) * l).toFixed(1)}" y2="${(24 + Math.sin(a) * l).toFixed(1)}"/>`; }).join('') + '</g></svg>',
-  blender: '<svg viewBox="0 0 48 48"><path d="M8 20 L22 10 M6 28 L24 15" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" fill="none"/><circle cx="28" cy="27" r="13" fill="currentColor"/><circle cx="28" cy="27" r="7" fill="#fff"/><circle cx="28" cy="27" r="3.4" fill="currentColor"/></svg>',
-  higgsfield: '<svg viewBox="0 0 48 48"><path d="M8 34 C14 14, 20 14, 24 24 S34 34, 40 14" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" fill="none"/><circle cx="40" cy="14" r="4" fill="currentColor"/><circle cx="8" cy="34" r="4" fill="currentColor"/></svg>',
-  figma: '<svg viewBox="0 0 48 48" fill="currentColor"><path d="M17 4h7v12h-7a6 6 0 0 1 0-12z"/><path d="M24 4h7a6 6 0 0 1 0 12h-7z" opacity=".75"/><path d="M17 16h7v12h-7a6 6 0 0 1 0-12z" opacity=".55"/><circle cx="31" cy="22" r="6" opacity=".9"/><path d="M17 28h7v6a6 6 0 1 1-7-6z" opacity=".7"/></svg>',
+/* ---------- логотипы программ для пайплайна ---------- */
+const LOGOS = {
+  claude: `<span class="ic" style="background:#D97757"><svg viewBox="0 0 24 24" fill="#fff"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg></span>`,
+  blender: `<span class="ic" style="background:#fff;box-shadow:inset 0 0 0 1px #E4E5E8"><svg viewBox="0 0 24 24" fill="#E87D0D"><path d="M12.51 13.214c.046-.8.438-1.506 1.03-2.006a3.424 3.424 0 0 1 2.212-.79c.85 0 1.631.3 2.211.79.592.5.983 1.206 1.028 2.005.045.823-.285 1.586-.865 2.153a3.389 3.389 0 0 1-2.374.938 3.393 3.393 0 0 1-2.376-.938c-.58-.567-.91-1.33-.865-2.152M7.35 14.831c.006.314.106.922.256 1.398a7.372 7.372 0 0 0 1.593 2.757 8.227 8.227 0 0 0 2.787 2.001 8.947 8.947 0 0 0 3.66.76 8.964 8.964 0 0 0 3.657-.772 8.285 8.285 0 0 0 2.785-2.01 7.428 7.428 0 0 0 1.592-2.762 6.964 6.964 0 0 0 .25-3.074 7.123 7.123 0 0 0-1.016-2.779 7.764 7.764 0 0 0-1.852-2.043h.002L13.566 2.55l-.02-.015c-.492-.378-1.319-.376-1.86.002-.547.382-.609 1.015-.123 1.415l-.001.001 3.126 2.543-9.53.01h-.013c-.788.001-1.545.518-1.695 1.172-.154.665.38 1.217 1.2 1.22V8.9l4.83-.01-8.62 6.617-.034.025c-.813.622-1.075 1.658-.563 2.313.52.667 1.625.668 2.447.004L7.414 14s-.069.52-.063.831zm12.09 1.741c-.97.988-2.326 1.548-3.795 1.55-1.47.004-2.827-.552-3.797-1.538a4.51 4.51 0 0 1-1.036-1.622 4.282 4.282 0 0 1 .282-3.519 4.702 4.702 0 0 1 1.153-1.371c.942-.768 2.141-1.183 3.396-1.185 1.256-.002 2.455.41 3.398 1.175.48.391.87.854 1.152 1.367a4.28 4.28 0 0 1 .522 1.706 4.236 4.236 0 0 1-.239 1.811 4.54 4.54 0 0 1-1.035 1.626"/></svg></span>`,
+  higgsfield: `<span class="ic"><img src="img/logo/higgsfield.webp" alt=""></span>`,
+  figma: `<span class="ic" style="background:#1E1E1E"><svg viewBox="0 0 38 57"><path fill="#1ABCFE" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/><path fill="#0ACF83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"/><path fill="#FF7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/><path fill="#F24E1E" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/><path fill="#A259FF" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/></svg></span>`,
 };
 
 /* ---------- логотип ADC и блоки схемы — геометрия из макета ---------- */
@@ -66,19 +72,24 @@ const LOGO = `<svg class="al-morph-svg" viewBox="0 0 905 253" aria-hidden="true"
   </g>
 </svg>`;
 
-/* ---------- маскот в такси, вид сбоку: едет вправо ---------- */
+/* ---------- маскот в такси, вид сбоку: едет вправо, смотрит на курсор ---------- */
+const EYE = (cx, id) => `<clipPath id="${id}"><ellipse cx="${cx}" cy="124" rx="19" ry="17"/></clipPath>
+  <ellipse cx="${cx}" cy="124" rx="19" ry="17" fill="#fff"/>
+  <g clip-path="url(#${id})"><g class="pupil"><circle cx="${cx}" cy="127" r="8.5" fill="#121314"/><circle cx="${cx + 3}" cy="124" r="2.6" fill="#fff"/></g>
+    <rect class="lid" x="${cx - 22}" y="100" width="44" height="17" fill="#E8432F"/></g>
+  <path d="M${cx - 19} 117h38" stroke="#121314" stroke-width="5" stroke-linecap="round"/>`;
 const TAXI = `<svg class="al-taxi" viewBox="0 0 520 300" aria-hidden="true">
   <g class="car">
-    <g class="bear">
-      <circle cx="232" cy="62" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="232" cy="62" r="10" fill="#C2301F"/>
-      <circle cx="338" cy="62" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="338" cy="62" r="10" fill="#C2301F"/>
-      <ellipse cx="285" cy="126" rx="76" ry="68" fill="#E8432F" stroke="#3BFFA9" stroke-width="9"/>
-      <ellipse cx="300" cy="118" rx="17" ry="14" fill="#fff"/><ellipse cx="338" cy="118" rx="15" ry="13" fill="#fff"/>
-      <g class="eye"><circle cx="306" cy="122" r="7" fill="#121314"/><circle cx="343" cy="122" r="6.5" fill="#121314"/></g>
-      <path d="M284 110 316 104M326 106 354 104" stroke="#121314" stroke-width="7" stroke-linecap="round"/>
-      <path d="M302 152q20 12 42-6" stroke="#121314" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M326 154q6 14 16 2z" fill="#F79AB1"/>
-    </g>
+    <g class="bear"><g transform="translate(0 -26)">
+      <circle cx="226" cy="64" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="226" cy="64" r="10" fill="#C2301F"/>
+      <circle cx="344" cy="64" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="344" cy="64" r="10" fill="#C2301F"/>
+      <ellipse cx="285" cy="128" rx="78" ry="70" fill="#E8432F" stroke="#3BFFA9" stroke-width="9"/>
+      ${EYE(260, 'al-e1')}${EYE(310, 'al-e2')}
+      <path d="M244 99l30 4M296 103l30-5" stroke="#121314" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="285" cy="150" rx="9" ry="6" fill="#8E1B12"/>
+      <path d="M266 164q22 12 42-4" stroke="#121314" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M294 165q4 14 14 4l-4-8z" fill="#F79AB1"/>
+    </g></g>
     <path d="M384 172 404 116h10l-16 56z" fill="#2A2B2E"/>
     <path d="M370 172 392 118h12l-20 54z" fill="#CFEFFF" opacity=".55"/>
     <rect x="58" y="168" width="414" height="84" rx="10" fill="#FFD21F"/>
@@ -119,11 +130,45 @@ function covers(v, { note = '', caption = '', light = false } = {}) {
   const lang = light ? '' : `<div class="al-lang rv"><button class="al-switch" role="switch" aria-checked="false" aria-label="английская версия">
       <span class="o">рус</span><span class="track"><i></i></span><span class="o">eng</span></button>${note ? `<p class="al-note">${T(note)}</p>` : ''}</div>`;
   const f = (n) => `<figure class="al-ph zoom al-flip" style="--r:${R[`${v}-${n}`]}" data-full="img/${v}-${n}${sfx}.webp" data-name="${v}-${n}${sfx}">
-      <img src="img/${v}-${n}${sfx}-s.webp" srcset="img/${v}-${n}${sfx}-s.webp 900w, img/${v}-${n}${sfx}.webp 1920w" sizes="(max-width: 900px) 100vw, 64vw" alt="" ${v === 'v1' && !light ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
+      <img src="img/${v}-${n}${sfx}-s.webp" srcset="img/${v}-${n}${sfx}-s.webp 900w, img/${v}-${n}${sfx}.webp 1920w" sizes="(max-width: 900px) 100vw, 64vw" alt="" loading="lazy" decoding="async">
       ${light ? '' : `<img class="en" alt="" loading="lazy" decoding="async" data-src="img/${v}-${n}-en-s.webp" data-srcset="img/${v}-${n}-en-s.webp 900w, img/${v}-${n}-en.webp 1920w" sizes="(max-width: 900px) 100vw, 64vw">`}</figure>`;
   return `<div class="al-covers${light ? '' : ' lang'}">${lang}<div class="al-pair rv">${f('cover')}${f('sq')}</div>${caption ? `<p class="al-cap rv">${T(caption)}</p>` : ''}</div>`;
 }
-const row = (names, cls = '') => `<div class="al-row ${cls} rv">${names.map(n => pic(n)).join('')}</div>`;
+
+const PROCESS1 = `
+  <div class="al-pipe">
+    ${['claude', 'blender', 'higgsfield', 'figma'].map((k, i) => `<div class="st" style="--i:${i}">${LOGOS[k]}<b>${{ claude: 'Claude', blender: 'Blender', higgsfield: 'Higgsfield', figma: 'Figma' }[k]}</b></div>`).join('<span class="ln"><i></i></span>')}
+  </div>
+  <div class="al-split">
+    <div>${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
+      ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
+    <div class="al-video"><video muted loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4"></video></div>
+  </div>
+  <div class="al-jr"><div style="--r:1.7778">${pic('p1-wire')}</div><div style="--r:.884">${pic('p1-angles')}</div>
+    <div class="ai" style="--r:1.15">${pic('ai1')}${pic('ai2')}<p class="al-cap">${T('ИИ-артефакты в мелких деталях')}</p></div></div>
+  ${row(['p1-render', 'p1-mask', 'p1-sand'])}
+  ${row(['r-black', 'r-mask', 'r-glass', 'r-dunes'])}
+
+  <h3 class="al-h3">HUD kit</h3>
+  <div class="al-tx">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
+  <div class="al-hud" aria-hidden="true"></div>
+
+  <h3 class="al-h3">поиски</h3>
+  <div class="al-tx">${P('Эскизы с Claude, я пробовала показать дизайн-процесс тремя способами: как поездку на такси (отсылка к собеседованию); бой на мечах или на ринге.', 'al-lead')}</div>
+  ${row(['s-trassa', 's-mech', 's-forms', 's-ring'])}
+  <h4 class="al-h4">${T('Как последовательный по этапам механизм')}</h4>
+  ${row(['s-gears', 's-steps', 's-pult'])}
+  <h4 class="al-h4">${T('Стеклянный материал показывает, что процессы прозрачны')}</h4>
+  ${row(['s-windows', 's-layers', 's-layers2'])}`;
+
+const PROCESS2 = `
+  <div class="al-tx"><div><h3 class="al-h3 first">эскизы</h3>${P('Ещё я хотела сделать фигуры в стиле детских кубиков или сравнить процесс с азбукой: всё просто, как ABC. Но поняла, что такая логика уведёт далеко от технологичного чёрного бигтеха.', 'al-lead')}</div></div>
+  ${row(['e-1', 'e-2', 'e-3'])}
+  <div class="al-tx"><div><h3 class="al-h3 first">как я работала</h3>
+    <ul class="al-items plain">${['Собрала 3D-модель.', 'Сделала маску, в том числе учитывая прозрачное стекло.', 'На постпродакшене поправила свет и цвет и добавила фон.'].map(t => `<li>${T(t)}</li>`).join('')}</ul></div></div>
+  ${row(['w-1', 'w-2', 'w-4'])}
+  <div class="al-jr"><div style="--r:${R['w-3']}">${pic('w-3')}</div><div style="--r:${R['d-console']}">${pic('d-console')}</div></div>
+  ${row(['d-knob', 'd-mini', 'd-key', 'd-ind'])}`;
 
 const html = `
 <div class="al-top"><div class="al-wrap">
@@ -132,13 +177,11 @@ const html = `
 </div></div>
 
 <section class="al-hero al-wrap" id="top">
-  <p class="al-eyebrow rv">Даша Купцова</p>
-  <h1 class="al-h1 rv">${T('Тестовое задание в Альфа-Банк на ведущего дизайнера внутренних коммуникаций', false)}</h1>
-  <div class="al-task rv" id="task">
-    <button class="al-task-row" aria-expanded="false" aria-controls="task-body">
-      <span>${T('Задание и анализ')}</span><b>Дизайн-процесс в&nbsp;Альфа-Бизнес</b><i class="pm" aria-hidden="true"></i>
-    </button>
-    <div class="al-task-body" id="task-body"><div class="in">
+  <h1 class="al-title rv"><span class="big">Даша Купцова<br>Тестовое задание</span>
+    <span class="sub">${T('в Альфа-Банк на ведущего дизайнера внутренних коммуникаций', false)}</span></h1>
+  <div class="al-fold al-task rv">
+    <button class="al-fold-row" aria-expanded="false"><span>задача</span><i class="pm" aria-hidden="true"></i></button>
+    <div class="al-fold-body"><div class="in">
       <div class="al-two">
         <div>${TASK.intro.split('\n').map(t => P(t, 'al-lead')).join('')}
           <ul class="al-items">${TASK.items.map(t => `<li>${T(t)}</li>`).join('')}</ul></div>
@@ -150,96 +193,53 @@ const html = `
       </div>
     </div></div>
   </div>
-  <div class="al-hero-vis rv">
-    <a href="#v1">${pic('v1-cover', { eager: true, zoom: false })}<b>первый вариант</b></a>
-    <a href="#v2">${pic('v2-cover', { eager: true, zoom: false })}<b>второй вариант</b></a>
+  <div class="al-cards rv">
+    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>первый вариант</b></a>
+    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>второй вариант</b></a>
   </div>
 </section>
 
 <!-- ============ первый вариант ============ -->
 <section class="al-sec al-wrap" id="v1">
-  ${head('первый вариант', '', 'обложка, ресайз, схема')}
+  ${head('первый вариант')}
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
   ${covers('v1', { note: EN_NOTE })}
   <div class="al-tx al-tx-r rv">${P('С главной шестерёнки на обложке я беру три основных переключателя, о которых шла речь, увеличиваю их и ставлю под каждый блок схемы.', 'al-lead')}</div>
-  <div class="al-wide rv"><div class="sc">${pic('v1-schema')}</div></div>
+  <div class="al-wide rv">${pic('v1-schema')}</div>
   ${covers('v1', { light: true })}
-
-  <div class="al-sub" id="v1-process">
-    ${head('процесс')}
-    <div class="al-pipe rv" aria-label="Claude, Blender, Higgsfield, Figma">
-      ${['claude', 'blender', 'higgsfield', 'figma'].map((k, i) => `<div class="st" style="--i:${i}"><span class="ic">${ICONS[k]}</span><b>${{ claude: 'Claude', blender: 'Blender', higgsfield: 'Higgsfield', figma: 'Figma' }[k]}</b></div>`).join('<span class="ln"><i></i></span>')}
-    </div>
-    <div class="al-tx rv">${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
-      ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
-    <div class="al-video rv"><video muted loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4" data-src-s="img/scene-s.mp4"></video></div>
-    <div class="al-mos rv">
-      ${pic('p1-wire', { cls: 'a' })}${pic('p1-angles', { cls: 'b' })}
-      <div class="c"><div class="al-ai">${pic('ai1')}${pic('ai2')}</div><p class="al-cap">${T('ИИ-артефакты в мелких деталях')}</p></div>
-    </div>
-    ${row(['p1-render', 'p1-mask', 'p1-sand'], 'r3')}
-    ${row(['r-black', 'r-mask', 'r-glass', 'r-dunes'], 'r4')}
-  </div>
-
-  <div class="al-sub">
-    ${head('HUD kit')}
-    <div class="al-tx rv">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
-  </div>
-</section>
-<div class="al-hud rv" aria-hidden="true"><div class="track"></div></div>
-
-<section class="al-sec al-wrap al-search">
-  ${head('поиски')}
-  <div class="al-tx rv">${P('Эскизы с Claude, я пробовала показать дизайн-процесс тремя способами: как поездку на такси (отсылка к собеседованию); бой на мечах или на ринге.', 'al-lead')}</div>
-  ${row(['s-trassa', 's-mech', 's-forms', 's-ring'], 'r4')}
-  <h3 class="al-h3 rv">${T('Как последовательный по этапам механизм')}</h3>
-  ${row(['s-gears', 's-steps', 's-pult'], 'r3')}
-  <h3 class="al-h3 rv">${T('Стеклянный материал показывает, что процессы прозрачны')}</h3>
-  ${row(['s-windows', 's-layers', 's-layers2'], 'r3')}
+  ${fold('процесс', PROCESS1)}
 </section>
 
 <!-- ============ второй вариант ============ -->
 <section class="al-sec al-wrap" id="v2">
-  ${head('второй вариант', '', 'обложка, ресайз, схема')}
+  ${head('второй вариант')}
   <div class="al-morph rv">
     <div class="vis">${LOGO}</div>
-    <div class="txt">${P('В схеме три главных блока, как и в логотипе. Поэтому я связала каждый элемент логотипа с блоком схемы.', 'al-lead')}
-      <div class="al-steps" role="tablist"><button class="on" data-s="0">логотип<i></i></button><button data-s="1">схема<i></i></button></div></div>
+    ${P('В схеме три главных блока, как и в логотипе. Поэтому я связала каждый элемент логотипа с блоком схемы.', 'al-lead')}
   </div>
   ${covers('v2', { note: EN_NOTE, caption: 'Логотип я поставила в правый угол, хотя в референсах он стоит в левом. Слева не складывалась композиция, и я решила, что такое отступление допустимо.' })}
   <div class="al-tx al-tx-r rv">${P('В схеме я взяла те же три блока, что и на основном лендинге. Только трубки разложила горизонтально, а не зигзагом, так схему легче читать.', 'al-lead')}
     ${P('В слове "приёмка" я убрала букву Ё: сейчас её обычно не ставят. Но это зависит от редполитики компании.')}</div>
-  <div class="al-wide rv"><div class="sc">${pic('v2-schema')}</div></div>
+  <div class="al-wide rv">${pic('v2-schema')}</div>
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому фону больше подходит один крупный элемент, но такой элемент будет трудно связать со схемой. Поэтому стекло, возможно, лучше не брать для этой задачи и приберечь для более минималистичных.', 'al-lead')}</div>
   ${covers('v2', { light: true })}
-
-  <div class="al-sub">
-    ${head('процесс')}
-    <div class="al-tx rv"><div><h3 class="al-h3 first">эскизы</h3>${P('Ещё я хотела сделать фигуры в стиле детских кубиков или сравнить процесс с азбукой: всё просто, как ABC. Но поняла, что такая логика уведёт далеко от технологичного чёрного бигтеха.', 'al-lead')}</div></div>
-    ${row(['e-1', 'e-2', 'e-3'], 'r3')}
-    <div class="al-tx rv"><div><h3 class="al-h3 first">как я работала</h3>
-      <ul class="al-items plain">${['Собрала 3D-модель.', 'Сделала маску, в том числе учитывая прозрачное стекло.', 'На постпродакшене поправила свет и цвет и добавила фон.'].map(t => `<li>${T(t)}</li>`).join('')}</ul></div></div>
-    ${row(['w-1', 'w-2', 'w-3', 'w-4'], 'r4')}
-    <div class="al-det rv">${pic('d-console', { cls: 'big' })}${['d-knob', 'd-mini', 'd-key', 'd-ind'].map(n => pic(n)).join('')}</div>
-  </div>
+  ${fold('процесс', PROCESS2)}
 </section>
 
 <!-- ============ вопросы и финал ============ -->
 <section class="al-sec al-wrap" id="faq">
-  ${head('вопросы')}
-  <div class="al-faq rv">${FAQ.map(([q, a], i) => `<div class="qa"><button aria-expanded="false" aria-controls="qa${i}"><span>${T(q)}</span><i class="pm" aria-hidden="true"></i></button>
-    <div class="ans" id="qa${i}"><div class="in">${P(a, 'al-lead')}</div></div></div>`).join('')}</div>
+  <div class="al-faq rv">${FAQ.map(([q, a]) => `<div class="qa"><button aria-expanded="false"><span>${T(q)}</span><i class="pm" aria-hidden="true"></i></button>
+    <div class="ans"><div class="in">${P(a, 'al-lead')}</div></div></div>`).join('')}</div>
 </section>
 
-<section class="al-end" aria-label="${T('Спасибо за просмотр, едем в офис?')}">
-  <div class="al-wrap"><h2 class="al-h1 rv">${T('Спасибо за просмотр, едем в офис?', false)}</h2></div>
+<section class="al-end">
+  <div class="al-wrap"><h2 class="al-h1 rv">${T('Спасибо за просмотр,', false)}<br>${T('едем в офис?', false)}</h2></div>
   <div class="road"><div class="scene">${TAXI}</div><div class="asphalt"><i></i></div></div>
 </section>
 <button class="al-up" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <div class="al-box" hidden><img alt=""><button aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
 
 ROOT.innerHTML = html;
-ROOT.querySelectorAll('.al-h2').forEach(h => h.lang = 'ru');
 
 /* ---------- картинки: плавно проявляются после загрузки ---------- */
 ROOT.querySelectorAll('.al-ph img:not(.en)').forEach(img => {
@@ -247,13 +247,12 @@ ROOT.querySelectorAll('.al-ph img:not(.en)').forEach(img => {
   if (img.complete && img.naturalWidth) ok(); else img.addEventListener('load', ok, { once: true });
 });
 
-// скелет уходит, когда первая картинка готова (или через 1,5 с)
+// скелет уходит, когда загрузились шрифты (или через 1,2 с)
 const skel = document.getElementById('al-skel');
-const hero = ROOT.querySelector('.al-hero-vis img');
 let gone = false;
 const off = () => { if (gone) return; gone = true; skel && skel.classList.add('off'); document.documentElement.classList.add('al-ready'); setTimeout(() => skel && skel.remove(), 700); };
-(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { if (hero.complete) off(); else hero.addEventListener('load', off, { once: true }); });
-setTimeout(off, 1500);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(off);
+setTimeout(off, 1200);
 
 /* ---------- появление при прокрутке ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
@@ -262,17 +261,42 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), { rootMargin: '0px 0px -8% 0px' });
 ROOT.querySelectorAll('.rv').forEach(el => io.observe(el));
 
-/* ---------- раскрывающиеся блоки: задание и вопросы ---------- */
-function fold(btn, body) {
+/* ---------- ролик: грузится при раскрытии процесса, играет только на экране ---------- */
+const vio = new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target;
+  if (e.isIntersecting) { if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; } v.play().catch(() => {}); }
+  else v.pause();
+}), { rootMargin: '100px 0px' });
+
+/* ---------- HUD kit: элементы библиотеки все сразу, каждый анимирован на месте ---------- */
+let hudDone = false;
+function loadHud() {
+  if (hudDone) return; hudDone = true;
+  fetch('img/hud.json').then(r => r.json()).then(list => {
+    ROOT.querySelector('.al-hud').innerHTML = list.map((s, i) => {
+      // размер элемента в макете: высокие уменьшаются, ширина решает, сколько ячеек сетки он займет
+      const [, w, h] = s.match(/width="([\d.]+)" height="([\d.]+)"/) || [0, 40, 40];
+      const z = Math.min(1.35, 150 / h);
+      return `<span class="it a${i % 4}" style="--d:${(i * .23 % 3).toFixed(2)}s;--z:${z.toFixed(2)};--s:${Math.min(5, Math.max(1, Math.ceil(w * z / 130)))}">${s}</span>`;
+    }).join('');
+  });
+}
+
+/* ---------- раскрывающиеся блоки: задача, процесс, вопросы ---------- */
+function toggle(btn, body) {
   btn.addEventListener('click', () => {
     const open = btn.getAttribute('aria-expanded') !== 'true';
     btn.setAttribute('aria-expanded', open);
     body.classList.toggle('open', open);
-    if (open) body.querySelectorAll('.al-ph img[loading="lazy"]').forEach(i => i.loading = 'eager');
+    if (open) {
+      body.querySelectorAll('img[loading="lazy"]:not(.en)').forEach(i => i.loading = 'eager');
+      if (body.querySelector('.al-hud')) loadHud();
+    }
+    body.querySelectorAll('video').forEach(v => { if (open) vio.observe(v); else { vio.unobserve(v); v.pause(); } });
   });
 }
-fold(ROOT.querySelector('.al-task-row'), ROOT.querySelector('.al-task-body'));
-ROOT.querySelectorAll('.al-faq .qa').forEach(q => fold(q.querySelector('button'), q.querySelector('.ans')));
+ROOT.querySelectorAll('.al-fold').forEach(f => toggle(f.querySelector('.al-fold-row'), f.querySelector('.al-fold-body')));
+ROOT.querySelectorAll('.al-faq .qa').forEach(q => toggle(q.querySelector('button'), q.querySelector('.ans')));
 
 /* ---------- переключатель «рус / eng»: английская версия грузится только по нажатию ---------- */
 ROOT.querySelectorAll('.al-covers.lang').forEach(box => {
@@ -290,42 +314,26 @@ ROOT.querySelectorAll('.al-covers.lang').forEach(box => {
   });
 });
 
-/* ---------- ролик: грузится, когда близко, играет только на экране ---------- */
-const vid = ROOT.querySelector('.al-video video');
-new IntersectionObserver(([e]) => {
-  if (e.isIntersecting) {
-    if (vid.dataset.src) { vid.src = innerWidth < 900 ? vid.dataset.srcS : vid.dataset.src; delete vid.dataset.src; }
-    vid.play().catch(() => {});
-  } else vid.pause();
-}, { rootMargin: '200px 0px' }).observe(vid);
-
-/* ---------- HUD kit: элементы библиотеки едут лентой по кругу ---------- */
-const hud = ROOT.querySelector('.al-hud');
-new IntersectionObserver(([e], o) => {
-  if (!e.isIntersecting) return; o.disconnect();
-  fetch('img/hud.json').then(r => r.json()).then(list => {
-    const items = list.map((s, i) => `<span class="it" style="--d:${(i % 7) * .37}s">${s}</span>`).join('');
-    hud.querySelector('.track').innerHTML = `<div class="set">${items}</div><div class="set">${items}</div>`;
-    hud.classList.add('go');
-  });
-}, { rootMargin: '400px 0px' }).observe(hud);
-
-/* ---------- логотип ⇄ схема: смена сама по кругу, нажатие — к нужной ---------- */
+/* ---------- логотип ⇄ схема: смена сама по кругу ---------- */
 const morph = ROOT.querySelector('.al-morph');
-const steps = [...morph.querySelectorAll('.al-steps button')];
-let mi = 0, mt;
-function mset(i, auto) {
-  mi = i; morph.classList.toggle('scheme', i === 1);
-  steps.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.remove('run'); });
-  clearTimeout(mt);
-  if (auto && !RM) { void steps[i].offsetWidth; steps[i].classList.add('run'); mt = setTimeout(() => mset(1 - mi, true), 3200); }
-}
-steps.forEach((b, k) => b.addEventListener('click', () => mset(k, false)));
-new IntersectionObserver(([e]) => { if (e.isIntersecting) mset(mi, true); else clearTimeout(mt); }, { threshold: .4 }).observe(morph);
+let mt;
+const loop = () => { morph.classList.toggle('scheme'); mt = setTimeout(loop, 1700); };
+new IntersectionObserver(([e]) => { clearTimeout(mt); if (e.isIntersecting && !RM) mt = setTimeout(loop, 900); }, { threshold: .3 }).observe(morph);
 
-/* ---------- финал: такси выезжает слева и едет вправо, дорога бежит под ним ---------- */
+/* ---------- финал: такси выезжает и едет вправо; маскот смотрит на курсор ---------- */
 const end = ROOT.querySelector('.al-end');
 new IntersectionObserver(([e]) => end.classList.toggle('drive', e.isIntersecting), { threshold: .25 }).observe(end);
+const pupils = [...end.querySelectorAll('.pupil')];
+const svg = end.querySelector('.al-taxi');
+addEventListener('pointermove', e => {
+  if (!end.classList.contains('drive')) return;
+  const r = svg.getBoundingClientRect(), s = r.width / 520;
+  pupils.forEach((p, i) => {
+    const cx = r.left + (i ? 310 : 260) * s, cy = r.top + 101 * s;
+    const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 200);
+    p.style.transform = `translate(${(Math.cos(a) * 8 * d).toFixed(2)}px,${(Math.sin(a) * 6 * d).toFixed(2)}px)`;
+  });
+}, { passive: true });
 
 /* ---------- крупный просмотр ---------- */
 const box = ROOT.querySelector('.al-box'), bimg = box.querySelector('img');
@@ -349,7 +357,7 @@ addEventListener('scroll', () => {
   if (tick) return; tick = true;
   requestAnimationFrame(() => {
     tick = false;
-    up.classList.toggle('on', scrollY > innerHeight * 1.2);
+    up.classList.toggle('on', scrollY > innerHeight * .8);
     let cur = -1; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * .4) cur = i; });
     links.forEach((a, i) => a.classList.toggle('on', i === cur));
   });
