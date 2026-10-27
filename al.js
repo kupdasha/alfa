@@ -169,6 +169,7 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
     <svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-6z"/></svg>
     <button class="fs" aria-label="на весь экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="i" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="o" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
   </footer>
+  <button class="x" aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </article></div>`;
 
 // палитра и шрифт из брендбука — живыми блоками, а не картинкой
@@ -287,7 +288,7 @@ const html = `
   <div class="road"><div class="scene">${TAXI}</div><div class="asphalt"><i></i></div></div>
 </section>
 <button class="al-up" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-<div class="al-box" hidden><img alt=""><button aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
+<div class="al-box" hidden><img alt=""><svg class="rot" viewBox="0 0 48 48" aria-hidden="true"><g class="ph"><rect x="17" y="8" width="14" height="24" rx="3"/><path d="M22 28h4"/></g><path class="ar" d="M10 30a14 14 0 0 0 14 10M24 40l-3-3M24 40l-3 3"/></svg><button aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
 
 ROOT.innerHTML = html;
 
@@ -326,8 +327,10 @@ ROOT.querySelectorAll('.al-post').forEach(post => {
   post.querySelector('.body').addEventListener('click', e => e.currentTarget.classList.toggle('open'));
   const media = post.querySelector('.media');
   const big = on => { post.classList.toggle('big', on); document.documentElement.style.overflow = on ? 'hidden' : ''; };
-  media.addEventListener('click', () => big(!post.classList.contains('big')));
-  post.querySelector('.fs').addEventListener('click', () => big(true));
+  media.addEventListener('click', e => { e.stopPropagation(); big(!post.classList.contains('big')); });
+  // нажатие на затемненный фон (он рисуется самим постом) или на крестик закрывает крупный просмотр
+  post.addEventListener('click', e => { if (post.classList.contains('big') && !e.target.closest('.media')) big(false); });
+  post.querySelector('.fs').addEventListener('click', e => { e.stopPropagation(); big(true); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && post.classList.contains('big')) big(false); });
 });
 
@@ -420,8 +423,17 @@ ROOT.addEventListener('click', e => {
   if (!f) return;
   bimg.src = f.dataset.full; box.hidden = false; requestAnimationFrame(() => box.classList.add('on'));
   document.documentElement.style.overflow = 'hidden';
+  // широкая картинка на телефоне: значок «поверните телефон»; где можно (Android) — сразу на весь экран горизонтально
+  const wide = parseFloat(f.style.getPropertyValue('--r')) > 1.4;
+  box.classList.toggle('wide', wide);
+  if (wide && matchMedia('(max-width: 640px) and (orientation: portrait)').matches && box.requestFullscreen && screen.orientation && screen.orientation.lock)
+    box.requestFullscreen().then(() => screen.orientation.lock('landscape')).catch(() => {});
 });
-const close = () => { box.classList.remove('on'); document.documentElement.style.overflow = ''; setTimeout(() => { box.hidden = true; bimg.removeAttribute('src'); }, 300); };
+const close = () => {
+  box.classList.remove('on'); document.documentElement.style.overflow = '';
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  setTimeout(() => { box.hidden = true; bimg.removeAttribute('src'); }, 300);
+};
 box.addEventListener('click', close);
 addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
 
