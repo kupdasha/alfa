@@ -156,11 +156,11 @@ const OV = { v1: `<path class="t1" d="M94.332 107.084V65.2537H68.433L65.941 87.8
 const post = (v, video) => `<div class="al-post-stage rv"><article class="al-post">
   <header><img class="av" src="img/adc-avatar.webp" alt="" width="56" height="56" loading="lazy"><b>Alfa Design Community</b></header>
   <div class="txt"><p class="h">${T(POST_TEXT[0])}</p><p class="body" title="показать целиком">${T(POST_TEXT[1])}</p></div>
-  <div class="media">
+  <div class="mwrap"><div class="media" title="крупно">
     <video muted autoplay loop playsinline preload="none" poster="img/${video}.webp" data-src="img/${video}.mp4"></video>
     <img class="lg" src="img/${video}-logo.webp" alt="" loading="lazy" decoding="async">
     <svg class="ov ${v}" viewBox="0 0 1080 1080" fill="none" aria-hidden="true">${OV[v]}</svg>
-  </div>
+  </div></div>
   <footer>
     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
     <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>
@@ -217,7 +217,7 @@ const PROCESS2 = `
 
 const html = `
 <div class="al-top"><div class="al-wrap">
-  <a href="#top" class="home">Даша Купцова</a>
+  <a href="https://kupdasha.ru/full" class="home" target="_blank" rel="noopener">Даша Купцова</a>
   <nav><a href="#v1">первый<span> вариант</span></a><a href="#v2">второй<span> вариант</span></a><a href="#faq">вопросы</a></nav>
 </div></div>
 
@@ -324,12 +324,10 @@ ROOT.querySelectorAll('.al-post').forEach(post => {
   new IntersectionObserver(([e]) => post.classList.toggle('on', e.isIntersecting), { threshold: .2 }).observe(post);
   post.querySelector('.body').addEventListener('click', e => e.currentTarget.classList.toggle('open'));
   const media = post.querySelector('.media');
-  post.querySelector('.fs').addEventListener('click', () => {
-    const d = document;
-    if (d.fullscreenElement || d.webkitFullscreenElement) return (d.exitFullscreen || d.webkitExitFullscreen).call(d);
-    const go = media.requestFullscreen || media.webkitRequestFullscreen;
-    if (go) go.call(media); else post.querySelector('video').webkitEnterFullscreen?.();
-  });
+  const big = on => { post.classList.toggle('big', on); document.documentElement.style.overflow = on ? 'hidden' : ''; };
+  media.addEventListener('click', () => big(!post.classList.contains('big')));
+  post.querySelector('.fs').addEventListener('click', () => big(true));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && post.classList.contains('big')) big(false); });
 });
 
 /* ---------- шрифт в задаче: Styrene A грузится при раскрытии, начертания сменяются сами ---------- */
