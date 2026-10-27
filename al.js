@@ -156,9 +156,9 @@ const PROCESS1 = `
   <h3 class="al-h3">поиски</h3>
   <div class="al-tx">${P('Эскизы с Claude, я пробовала показать дизайн-процесс тремя способами: как поездку на такси (отсылка к собеседованию); бой на мечах или на ринге.', 'al-lead')}</div>
   ${row(['s-trassa', 's-mech', 's-forms', 's-ring'])}
-  <h4 class="al-h4">${T('Как последовательный по этапам механизм')}</h4>
+  <h4 class="al-h4">${T('как последовательный по этапам механизм')}</h4>
   ${row(['s-gears', 's-steps', 's-pult'])}
-  <h4 class="al-h4">${T('Стеклянный материал показывает, что процессы прозрачны')}</h4>
+  <h4 class="al-h4">${T('стеклянный материал показывает, что процессы прозрачны')}</h4>
   ${row(['s-windows', 's-layers', 's-layers2'])}`;
 
 const PROCESS2 = `
@@ -177,7 +177,7 @@ const html = `
 </div></div>
 
 <section class="al-hero al-wrap" id="top">
-  <h1 class="al-title rv"><span class="big">Даша Купцова<br>Тестовое задание</span>
+  <h1 class="al-title rv"><span class="big">тестовое задание</span>
     <span class="sub">${T('в Альфа-Банк на ведущего дизайнера внутренних коммуникаций', false)}</span></h1>
   <div class="al-fold al-task rv">
     <button class="al-fold-row" aria-expanded="false"><span>задача</span><i class="pm" aria-hidden="true"></i></button>
@@ -193,6 +193,7 @@ const html = `
       </div>
     </div></div>
   </div>
+  <h2 class="al-h3 al-res rv">результат</h2>
   <div class="al-cards rv">
     <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>первый вариант</b></a>
     <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>второй вариант</b></a>
@@ -202,12 +203,13 @@ const html = `
 <!-- ============ первый вариант ============ -->
 <section class="al-sec al-wrap" id="v1">
   ${head('первый вариант')}
-  <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
+  <div class="al-tx rv">${P('Я представила процесс как слаженный механизм, в центре которого три основных элемента. Они продолжаются в схеме, а вместе складываются в зелёную букву А — отсылку к логотипу дизайн-команды.', 'al-lead')}</div>
   ${covers('v1', { note: EN_NOTE })}
   <div class="al-tx al-tx-r rv">${P('С главной шестерёнки на обложке я беру три основных переключателя, о которых шла речь, увеличиваю их и ставлю под каждый блок схемы.', 'al-lead')}</div>
   <div class="al-wide rv">${pic('v1-schema')}</div>
+  <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
   ${covers('v1', { light: true })}
-  ${fold('процесс', PROCESS1)}
+  ${fold('процесс', PROCESS1, 'dark')}
 </section>
 
 <!-- ============ второй вариант ============ -->
@@ -223,7 +225,7 @@ const html = `
   <div class="al-wide rv">${pic('v2-schema')}</div>
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому фону больше подходит один крупный элемент, но такой элемент будет трудно связать со схемой. Поэтому стекло, возможно, лучше не брать для этой задачи и приберечь для более минималистичных.', 'al-lead')}</div>
   ${covers('v2', { light: true })}
-  ${fold('процесс', PROCESS2)}
+  ${fold('процесс', PROCESS2, 'dark')}
 </section>
 
 <!-- ============ вопросы и финал ============ -->
@@ -233,7 +235,7 @@ const html = `
 </section>
 
 <section class="al-end">
-  <div class="al-wrap"><h2 class="al-h1 rv">${T('Спасибо за просмотр,', false)}<br>${T('едем в офис?', false)}</h2></div>
+  <div class="al-wrap"><h2 class="al-h1 rv">${T('спасибо за просмотр,', false)}<br>${T('едем в офис?', false)}</h2></div>
   <div class="road"><div class="scene">${TAXI}</div><div class="asphalt"><i></i></div></div>
 </section>
 <button class="al-up" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
@@ -298,17 +300,18 @@ function toggle(btn, body) {
 ROOT.querySelectorAll('.al-fold').forEach(f => toggle(f.querySelector('.al-fold-row'), f.querySelector('.al-fold-body')));
 ROOT.querySelectorAll('.al-faq .qa').forEach(q => toggle(q.querySelector('button'), q.querySelector('.ans')));
 
-/* ---------- переключатель «рус / eng»: английская версия грузится только по нажатию ---------- */
+/* ---------- переключатель «рус / eng»: английская версия подгружается заранее, пока блок подъезжает к экрану ---------- */
+const loadEn = box => box.querySelectorAll('img.en[data-src]').forEach(en => { en.loading = 'eager'; en.srcset = en.dataset.srcset; en.src = en.dataset.src; delete en.dataset.src; });
+const enIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { loadEn(e.target); enIO.unobserve(e.target); } }), { rootMargin: '800px 0px' });
 ROOT.querySelectorAll('.al-covers.lang').forEach(box => {
+  enIO.observe(box);
   const sw = box.querySelector('.al-switch');
   sw.addEventListener('click', () => {
     const on = sw.getAttribute('aria-checked') !== 'true';
     sw.setAttribute('aria-checked', on);
+    loadEn(box);
     box.querySelectorAll('.al-flip').forEach(f => {
-      const en = f.querySelector('.en');
-      if (en.dataset.src) { en.srcset = en.dataset.srcset; en.src = en.dataset.src; delete en.dataset.src; }
-      const go = () => f.classList.toggle('is-en', on);
-      if (on && !en.complete) en.addEventListener('load', go, { once: true }); else go();
+      f.classList.toggle('is-en', on);
       f.dataset.full = `img/${f.dataset.name.replace(/(cover|sq)$/, on ? '$1-en' : '$1')}.webp`;
     });
   });
