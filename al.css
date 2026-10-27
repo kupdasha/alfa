@@ -102,6 +102,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-two{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(28px,5vw,96px);padding-top:clamp(16px,2vw,32px);align-items:start}
 .al-analysis{padding-top:clamp(48px,6vw,96px)}
 .al .al-analysis .al-h3{margin:0 0 20px}
+.al-analysis .al-pal{margin-top:6px}
 .al .al-items{margin-top:clamp(28px,2.8vw,44px);display:grid;border-top:1px solid var(--line)}
 .al-items li{font-size:clamp(17px,1.25vw,20px);line-height:1.45;padding:16px 0 16px 34px;border-bottom:1px solid var(--line);position:relative;text-wrap:pretty}
 .al-items li::before{content:"";position:absolute;left:4px;top:calc(16px + .72em - 6px);width:12px;height:12px;background:var(--red)}
@@ -111,18 +112,17 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 
 /* ---------- палитра: полосы вырастают по очереди, при наведении раскрываются ---------- */
 .al-pal{display:flex;flex-direction:column;gap:4px}
-.al-pal .gap{height:12px}
-.al-pal .sw{position:relative;height:44px;overflow:hidden;transition:height .5s var(--ease)}
+.al-pal .sw{position:relative;height:64px;overflow:hidden;transition:height .5s var(--ease)}
 .al-pal .sw::before{content:"";position:absolute;inset:0;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease);transition-delay:calc(var(--i) * 90ms + .15s)}
 .al-pal .sw span{position:relative;display:flex;align-items:center;height:100%;padding:0 16px;font-size:16px;font-weight:500;color:#fff;opacity:0;transition:opacity .5s;transition-delay:calc(var(--i) * 90ms + .7s)}
 .al-pal .sw.lt span{color:var(--ink)}
 .al-fold-body.open .al-pal .sw::before{transform:none}
 .al-fold-body.open .al-pal .sw span{opacity:1}
-@media (hover:hover){.al-pal .sw:hover{height:72px}}
+@media (hover:hover){.al-pal .sw:hover{height:84px}}
 .al-pal .metal::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);background-size:250% 100%;animation:al-shine 3s linear infinite}
 .al-pal+.al-cap{margin-top:12px}
 /* шрифт Styrene A */
-.al-font{display:grid;grid-template-columns:auto 1fr;gap:12px clamp(20px,2vw,32px);align-items:end;margin-top:clamp(40px,4vw,64px);padding-top:clamp(24px,2.4vw,40px);border-top:1px solid var(--line);--w:400}
+.al-font{display:grid;grid-template-columns:auto 1fr;gap:12px clamp(20px,2vw,32px);align-items:end;margin-top:clamp(32px,3vw,48px);padding-top:clamp(24px,2.4vw,40px);border-top:1px solid var(--line);--w:400}
 .al-font .aa,.al-font .abc{font-family:'Styrene A',var(--font);font-weight:var(--w);opacity:0;transition:opacity .6s}
 .al-font.ok .aa,.al-font.ok .abc{opacity:1}
 .al-font .aa{font-size:clamp(88px,8vw,136px);line-height:.8;letter-spacing:-.02em}

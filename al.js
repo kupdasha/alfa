@@ -172,9 +172,8 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
 </article></div>`;
 
 // палитра и шрифт из брендбука — живыми блоками, а не картинкой
-const PAL = [['красный', '#EF3124'], ['черный', '#0B0B0C'], ['серый', '#8D9095'], ['светло-серый', '#E2E4E7'],
-  ['Pantone 2597 CU', '#6A25CE'], ['Pantone 877 CU (металлик)', '#898989', 'metal'], ['Pantone 318 C', '#00E2E1']];
-const BRAND = `<div class="al-pal">${PAL.map(([n, c, k], i) => `${i === 4 ? '<span class="gap"></span>' : ''}<div class="sw ${k || ''}${['#E2E4E7', '#00E2E1'].includes(c) ? ' lt' : ''}" style="--c:${c};--i:${i}"><span>${n}</span></div>`).join('')}</div>
+const PAL = [['Pantone 2597 CU', '#6A25CE'], ['Pantone 877 CU (металлик)', '#898989', 'metal'], ['Pantone 318 C', '#00E2E1']];
+const BRAND = `<div class="al-pal">${PAL.map(([n, c, k], i) => `<div class="sw ${k || ''}${c === '#00E2E1' ? ' lt' : ''}" style="--c:${c};--i:${i}"><span>${n}</span></div>`).join('')}</div>
   <p class="al-cap">${T('Дополнительные цвета я спросила у дизайнера в Альфа-Бизнесе')}</p>
   <div class="al-font"><div class="aa">Аа</div><div class="meta"><b>Styrene A</b><ul><li class="on">Regular</li><li>Medium</li><li>Bold</li></ul></div>
     <p class="abc">АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ<br>абвгдежзийклмнопрстуфхцчшщэюя 0123456789</p></div>`;
@@ -235,7 +234,7 @@ const html = `
         <div class="al-brief">${pic('t-update')}${pic('t-nba')}${pic('t-old', { cls: 'wide' })}</div>
       </div>
       <div class="al-two al-analysis">
-        <div><h3 class="al-h3">анализ</h3>${TASK.analysis.map(t => P(t)).join('')}</div>
+        <div><h3 class="al-h3 first">анализ</h3>${TASK.analysis.map(t => P(t)).join('')}</div>
         <div>${BRAND}</div>
       </div>
     </div></div>
