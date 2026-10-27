@@ -158,6 +158,7 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
   <div class="txt"><p class="h">${T(POST_TEXT[0])}</p><p class="body" title="показать целиком">${T(POST_TEXT[1])}</p></div>
   <div class="media">
     <video muted autoplay loop playsinline preload="none" poster="img/${video}.webp" data-src="img/${video}.mp4"></video>
+    <img class="lg" src="img/${video}-logo.webp" alt="" loading="lazy" decoding="async">
     <svg class="ov ${v}" viewBox="0 0 1080 1080" fill="none" aria-hidden="true">${OV[v]}</svg>
   </div>
   <footer>
