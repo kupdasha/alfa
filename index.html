@@ -21,6 +21,8 @@
 <i style="width:100%;height:clamp(200px,40vw,560px)"></i>
 </div>
 <div id="al" class="al"></div>
+<!-- страховка: если код не загрузился или упал, скелет не висит вечно -->
+<script>setTimeout(function(){var k=document.getElementById('al-skel');if(k&&!document.getElementById('al').children.length){k.innerHTML='<p style="font:500 20px/1.4 system-ui,sans-serif;color:#121314;max-width:30ch;margin:0 0 40vh">Страница не загрузилась. Обновите ее, пожалуйста</p>';k.style.justifyContent='center';}},9000)</script>
 <script src="al.js" defer></script>
 </body>
 </html>
