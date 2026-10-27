@@ -135,6 +135,11 @@ function covers(v, { note = '', caption = '', light = false } = {}) {
   return `<div class="al-covers${light ? '' : ' lang'}">${lang}<div class="al-pair rv">${f('cover')}${f('sq')}</div>${caption ? `<p class="al-cap rv">${T(caption)}</p>` : ''}</div>`;
 }
 
+// красные HUD-элементы в углах карточек — из библиотеки макета: уголки, пиксельная лесенка, метка версии
+const CORNERS = `<span class="hud" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+  <svg class="px" viewBox="0 0 72 72"><path fill="#EF3124" d="M48 0h24v24H48zM24 24h24v24H24zM0 48h24v24H0z"/></svg>
+  <svg class="cross" viewBox="0 0 48 48"><path fill="none" stroke="#EF3124" stroke-width="2" d="M24 0v18M24 30v18M0 24h18M30 24h18"/><rect x="21" y="21" width="6" height="6" fill="#EF3124"/></svg></span>`;
+
 const PROCESS1 = `
   <div class="al-pipe">
     ${['claude', 'blender', 'higgsfield', 'figma'].map((k, i) => `<div class="st" style="--i:${i}">${LOGOS[k]}<b>${{ claude: 'Claude', blender: 'Blender', higgsfield: 'Higgsfield', figma: 'Figma' }[k]}</b></div>`).join('<span class="ln"><i></i></span>')}
@@ -142,12 +147,15 @@ const PROCESS1 = `
   <div class="al-split">
     <div>${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
       ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
-    <div class="al-video"><video muted loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4"></video></div>
+    <div class="al-video"><video muted autoplay loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4"></video></div>
   </div>
-  <div class="al-jr"><div style="--r:1.7778">${pic('p1-wire')}</div><div style="--r:.884">${pic('p1-angles')}</div>
-    <div class="ai" style="--r:1.15">${pic('ai1')}${pic('ai2')}<p class="al-cap">${T('ИИ-артефакты в мелких деталях')}</p></div></div>
-  ${row(['p1-render', 'p1-mask', 'p1-sand'])}
-  ${row(['r-black', 'r-mask', 'r-glass', 'r-dunes'])}
+  <div class="al-story">
+    ${[['3D', ['p1-wire', 'p1-angles', 'r-black']],
+       ['слой ИИ', ['p1-render', 'ai1', 'ai2']],
+       ['маска', ['p1-mask', 'r-mask']],
+       ['фон', ['p1-sand', 'r-dunes', 'r-glass']]].map(([t, ns]) => `<div class="step"><b>${t}</b>
+         <div>${row(ns)}${t === 'слой ИИ' ? `<p class="al-cap r">${T('ИИ-артефакты в мелких деталях')}</p>` : ''}</div></div>`).join('')}
+  </div>
 
   <h3 class="al-h3">HUD kit</h3>
   <div class="al-tx">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
@@ -195,8 +203,8 @@ const html = `
   </div>
   <h2 class="al-h3 al-res rv">результат</h2>
   <div class="al-cards rv">
-    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>первый вариант</b></a>
-    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>второй вариант</b></a>
+    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${CORNERS}<b>первый вариант</b></a>
+    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${CORNERS}<b>второй вариант</b></a>
   </div>
 </section>
 
@@ -266,7 +274,7 @@ ROOT.querySelectorAll('.rv').forEach(el => io.observe(el));
 /* ---------- ролик: грузится при раскрытии процесса, играет только на экране ---------- */
 const vio = new IntersectionObserver(es => es.forEach(e => {
   const v = e.target;
-  if (e.isIntersecting) { if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; } v.play().catch(() => {}); }
+  if (e.isIntersecting) { if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; v.load(); } v.play().catch(() => {}); }
   else v.pause();
 }), { rootMargin: '100px 0px' });
 
@@ -278,8 +286,8 @@ function loadHud() {
     ROOT.querySelector('.al-hud').innerHTML = list.map((s, i) => {
       // размер элемента в макете: высокие уменьшаются, ширина решает, сколько ячеек сетки он займет
       const [, w, h] = s.match(/width="([\d.]+)" height="([\d.]+)"/) || [0, 40, 40];
-      const z = Math.min(1.35, 150 / h);
-      return `<span class="it a${i % 4}" style="--d:${(i * .23 % 3).toFixed(2)}s;--z:${z.toFixed(2)};--s:${Math.min(5, Math.max(1, Math.ceil(w * z / 130)))}">${s}</span>`;
+      const z = Math.min(1, 110 / h);
+      return `<span class="it a${i % 4}" style="--d:${(i * .23 % 3).toFixed(2)}s;--z:${z.toFixed(2)};--s:${Math.min(5, Math.max(1, Math.ceil(w * z / 86)))}">${s}</span>`;
     }).join('');
   });
 }
