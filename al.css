@@ -231,19 +231,29 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-story .al-cap{margin-top:12px}
 .al-story .al-cap.r{text-align:right}
 
-/* ---------- мокап поста во внутреннем сообществе ---------- */
-.al-post-stage{display:flex;justify-content:center;padding:clamp(56px,6vw,104px) 0;background:var(--soft);margin-bottom:var(--gap)}
-.al-post{width:min(100%,560px);background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(18,19,20,.06),0 12px 40px rgba(18,19,20,.06)}
-.al-post header{display:flex;align-items:center;gap:14px;padding:20px 24px 0}
-.al-post .av{width:48px;height:48px;border-radius:50%;flex:none}
-.al-post header b{font-weight:500;font-size:17px}
-.al-post .txt{padding:16px 24px 20px;font-size:16px;line-height:1.45}
-.al-post .txt p+p{margin-top:8px}
-.al-post .txt .h{font-weight:500;font-size:18px;line-height:1.3}
+/* ---------- мокап поста во внутреннем сообществе: помещается на экран целиком ---------- */
+.al-post-stage{display:flex;justify-content:center;padding:clamp(40px,4vw,72px) 0;background:var(--soft);margin-bottom:var(--gap)}
+.al-post{--side:min(560px,calc(100svh - 330px));width:max(360px,var(--side));background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(18,19,20,.06),0 12px 40px rgba(18,19,20,.06)}
+.al-post header{display:flex;align-items:center;gap:12px;padding:16px 20px 0}
+.al-post .av{width:40px;height:40px;border-radius:50%;flex:none}
+.al-post header b{font-weight:500;font-size:16px}
+.al-post .txt{padding:12px 20px 16px;font-size:16px;line-height:1.4}
+.al-post .txt .h{font-weight:500;font-size:17px;line-height:1.3;margin-bottom:6px}
+.al-post .body{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.al-post .body.open{display:block}
 .al-post .media{position:relative;aspect-ratio:1;background:#000}
 .al-post .media video,.al-post .ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.al-post footer{display:flex;gap:20px;padding:16px 24px 20px}
-.al-post footer svg{width:26px;height:26px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
+.al-post .media:fullscreen{width:100vmin;height:100vmin;margin:auto;aspect-ratio:auto}
+.al-post .media:fullscreen::backdrop{background:#000}
+.al-post footer .fs{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--ink)!important;color:#fff;display:grid;place-items:center;transition:transform .4s var(--ease)}
+.al-post footer{align-items:center}
+.al-post footer .fs svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none}
+.al-post .fs .o{display:none}
+
+
+@media (hover:hover){.al-post footer .fs:hover{transform:scale(1.08)}}
+.al-post footer{display:flex;gap:20px;padding:14px 20px 16px}
+.al-post footer svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
 /* анимация поверх ролика: цикл 12 с — появление, пауза, уход */
 .al-post .ov *{transform-box:fill-box}
 .al-post .t1{animation:al-p-wipe 12s var(--ease) infinite}
@@ -254,7 +264,12 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-post .sq{transform-origin:center;animation:al-spin 6s linear infinite}
 .al-post .b1,.al-post .b2{animation:al-blink 3s ease-in-out infinite}.al-post .b2{animation-delay:-1.4s}
 .al-post .ln{transform-origin:left;animation:al-p-line 3s var(--ease) infinite alternate}
-.al-post .cn{animation:al-p-rise 12s var(--ease) infinite .5s}
+.al-post .cn,.al-post .bars{animation:al-p-rise 12s var(--ease) infinite .5s}
+.al-post .cr{transform-origin:center;animation:al-pop 4s ease-in-out infinite}
+.al-post .ind path{animation:al-blink 2.4s ease-in-out infinite}
+.al-post .ind path:nth-child(2){animation-delay:.3s}.al-post .ind path:nth-child(3){animation-delay:.6s}.al-post .ind path:nth-child(4){animation-delay:.9s}.al-post .ind path:nth-child(5){animation-delay:1.2s}
+.al-post .px path{animation:al-blink 3.6s ease-in-out infinite}
+.al-post .px path:nth-child(2){animation-delay:.25s}.al-post .px path:nth-child(3){animation-delay:.5s}
 .al-post:not(.on) .ov *{animation-play-state:paused}
 @keyframes al-p-wipe{0%{clip-path:inset(0 100% 0 0)}8%,88%{clip-path:inset(0 0 0 0)}96%,100%{clip-path:inset(0 0 0 100%)}}
 @keyframes al-p-rise{0%,4%{opacity:0;transform:translateY(30px)}12%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
