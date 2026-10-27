@@ -139,12 +139,13 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-card .hud i{--o:0px;position:absolute;width:clamp(20px,2vw,32px);aspect-ratio:1;border:0 solid #EF3124;transition:transform .6s var(--ease)}
 .al-card .hud .tl{left:0;top:0;border-width:2px 0 0 2px;transform:translate(var(--o),var(--o))}
 .al-card .hud .tr{right:0;top:0;border-width:2px 2px 0 0;transform:translate(calc(var(--o) * -1),var(--o))}
-.al-card .hud .bl{left:0;bottom:0;border-width:0 0 2px 2px;transform:translate(var(--o),calc(var(--o) * -1))}
-.al-card .hud .br{right:0;bottom:0;border-width:0 2px 2px 0;transform:translate(calc(var(--o) * -1),calc(var(--o) * -1))}
-.al-card .hud .px{position:absolute;right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-blink 3.6s ease-in-out infinite}
-.al-card .hud .cross{position:absolute;left:38%;top:30%;width:clamp(28px,2.6vw,40px);animation:al-pop 4.2s ease-in-out infinite}
-.al-card.light .hud .cross{left:58%;top:38%;animation-delay:-2s}
-.al-card.light .hud .px{animation-delay:-1.2s}
+.al-card .hud .e{position:absolute;height:auto}
+.al-card.dark .px{right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-blink 3.6s ease-in-out infinite}
+.al-card.dark .cross{left:38%;top:30%;width:clamp(28px,2.6vw,40px);animation:al-pop 4.2s ease-in-out infinite}
+.al-card.dark .ind{right:0;bottom:6px;width:clamp(64px,5.6vw,88px);animation:al-scan 3.2s ease-in-out infinite}
+.al-card.light .chk{right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-pop 4s ease-in-out infinite}
+.al-card.light .frame{left:52%;top:34%;width:clamp(64px,6vw,96px);animation:al-nudge 3.8s ease-in-out infinite}
+.al-card.light .line{right:0;bottom:8px;width:clamp(110px,10vw,160px);animation:al-scan 3.6s ease-in-out infinite -1s}
 
 /* ---------- главы ---------- */
 .al-sec{padding-top:clamp(120px,14vw,240px)}

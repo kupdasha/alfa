@@ -135,10 +135,18 @@ function covers(v, { note = '', caption = '', light = false } = {}) {
   return `<div class="al-covers${light ? '' : ' lang'}">${lang}<div class="al-pair rv">${f('cover')}${f('sq')}</div>${caption ? `<p class="al-cap rv">${T(caption)}</p>` : ''}</div>`;
 }
 
-// красные HUD-элементы в углах карточек — из библиотеки макета: уголки, пиксельная лесенка, метка версии
-const CORNERS = `<span class="hud" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
-  <svg class="px" viewBox="0 0 72 72"><path fill="#EF3124" d="M48 0h24v24H48zM24 24h24v24H24zM0 48h24v24H0z"/></svg>
-  <svg class="cross" viewBox="0 0 48 48"><path fill="none" stroke="#EF3124" stroke-width="2" d="M24 0v18M24 30v18M0 24h18M30 24h18"/><rect x="21" y="21" width="6" height="6" fill="#EF3124"/></svg></span>`;
+// красные HUD-элементы на карточках — из библиотеки макета; у каждой карточки свой набор, уголки только сверху
+const RED = '#EF3124';
+const HUDS = {
+  dark: `<span class="hud" aria-hidden="true"><i class="tl"></i><i class="tr"></i>
+    <svg class="e px" viewBox="0 0 72 72"><path fill="${RED}" d="M48 0h24v24H48zM24 24h24v24H24zM0 48h24v24H0z"/></svg>
+    <svg class="e cross" viewBox="0 0 48 48"><path fill="none" stroke="${RED}" stroke-width="2" d="M24 0v18M24 30v18M0 24h18M30 24h18"/><rect x="21" y="21" width="6" height="6" fill="${RED}"/></svg>
+    <svg class="e ind" viewBox="0 0 88 12"><path fill="${RED}" d="M0 0h12v12H0zM18 0h12v12H18zM36 0h12v12H36z"/><path fill="none" stroke="${RED}" stroke-width="1.5" d="M54.75.75h10.5v10.5h-10.5zM72.75.75h10.5v10.5h-10.5z"/></svg></span>`,
+  light: `<span class="hud" aria-hidden="true"><i class="tl"></i><i class="tr"></i>
+    <svg class="e chk" viewBox="0 0 72 72"><path fill="${RED}" d="M0 0h24v24H0zM48 0h24v24H48zM24 24h24v24H24zM0 48h24v24H0zM48 48h24v24H48z"/></svg>
+    <svg class="e frame" viewBox="0 0 96 48"><path fill="none" stroke="${RED}" stroke-width="2" d="M14 1H1v46h13M82 1h13v46H82"/></svg>
+    <svg class="e line" viewBox="0 0 160 16"><path fill="${RED}" d="M0 7.25h120v1.5H0zM144 0h16v16h-16z"/></svg></span>`,
+};
 
 const PROCESS1 = `
   <div class="al-pipe">
@@ -203,8 +211,8 @@ const html = `
   </div>
   <h2 class="al-h3 al-res rv">результат</h2>
   <div class="al-cards rv">
-    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${CORNERS}<b>первый вариант</b></a>
-    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${CORNERS}<b>второй вариант</b></a>
+    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${HUDS.dark}<b>первый вариант</b></a>
+    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${HUDS.light}<b>второй вариант</b></a>
   </div>
 </section>
 
