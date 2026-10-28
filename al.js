@@ -161,7 +161,7 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
   <header><img class="av" src="img/adc-avatar.webp" alt="" width="56" height="56" loading="lazy"><b>Alfa Design Community</b></header>
   <div class="txt"><p class="h">${T(POST_TEXT[0])}</p><p class="body" title="показать целиком">${T(POST_TEXT[1])}</p></div>
   <div class="mwrap"><div class="media" title="крупно">
-    <video muted autoplay loop playsinline preload="none" poster="img/${video}.webp" data-src="img/${video}.mp4?v=${VV[video]}" data-src-s="img/${video}-s.mp4?v=${VV[video + '-s']}"></video>
+    <video muted autoplay loop playsinline preload="none" data-poster="img/${video}.webp" data-src="img/${video}.mp4?v=${VV[video]}" data-src-s="img/${video}-s.mp4?v=${VV[video + '-s']}"></video>
     <span class="vid" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="ring" cx="24" cy="24" r="22"/><path d="M19 15l14 9-14 9z"/></svg></span>
     <img class="lg" src="img/${video}-logo.webp" alt="" loading="lazy" decoding="async">
     <svg class="ov ${v}" viewBox="0 0 1080 1080" fill="none" aria-hidden="true">${OV[v]}</svg>
@@ -189,7 +189,7 @@ const PROCESS1 = `
   <div class="al-split">
     <div>${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
       ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
-    <div class="al-video"><video muted autoplay loop playsinline preload="none" poster="img/scene.webp" data-src="img/scene.mp4?v=0681807c" data-src-s="img/scene-s.mp4?v=8ecef3db"></video><span class="vid" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="ring" cx="24" cy="24" r="22"/><path d="M19 15l14 9-14 9z"/></svg></span></div>
+    <div class="al-video"><video muted autoplay loop playsinline preload="none" data-poster="img/scene.webp" data-src="img/scene.mp4?v=0681807c" data-src-s="img/scene-s.mp4?v=8ecef3db"></video><span class="vid" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="ring" cx="24" cy="24" r="22"/><path d="M19 15l14 9-14 9z"/></svg></span></div>
   </div>
   <div class="al-story">
     ${[['3D', ['p1-wire', 'p1-angles', 'r-black']],
@@ -298,7 +298,7 @@ ROOT.innerHTML = html;
 /* ---------- картинки: плавно проявляются после загрузки ---------- */
 ROOT.querySelectorAll('.al-ph img:not(.en)').forEach(img => {
   const ok = () => img.closest('.al-ph').classList.add('ok');
-  if (img.complete && img.naturalWidth) ok(); else img.addEventListener('load', ok, { once: true });
+  if (img.complete && img.naturalWidth) ok(); else img.addEventListener('load', ok);
 });
 
 // скелет уходит, как только готов основной шрифт (он в preload) — или через 0,4 с; остальные начертания догружаются на живой странице
@@ -307,6 +307,9 @@ let gone = false;
 const off = () => { if (gone) return; gone = true; skel && skel.classList.add('off'); document.documentElement.classList.add('al-ready'); setTimeout(() => skel && skel.remove(), 700); };
 (document.fonts && document.fonts.load ? document.fonts.load('500 20px "Golos Text"') : Promise.resolve()).then(off, off);
 setTimeout(off, 400);
+
+// картинки внутри свернутых блоков: адрес убираем до раскрытия — иначе браузер грузит их сразу, свернутый блок лежит в зоне первого экрана
+ROOT.querySelectorAll('.al-fold-body img[src]').forEach(i => { i.dataset.lazySrc = i.getAttribute('src'); i.dataset.lazySet = i.getAttribute('srcset') || ''; i.removeAttribute('src'); i.removeAttribute('srcset'); });
 
 /* ---------- появление при прокрутке ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
@@ -320,6 +323,7 @@ const vio = new IntersectionObserver(es => es.forEach(e => {
   const v = e.target;
   const wrap = v.parentElement;
   if (e.isIntersecting) {
+    if (v.dataset.poster) { v.poster = v.dataset.poster; delete v.dataset.poster; }
     if (v.dataset.src) { v.src = innerWidth < 900 && v.dataset.srcS ? v.dataset.srcS : v.dataset.src; delete v.dataset.src; v.load(); }
     // телефон может запретить автозапуск (энергосбережение) — тогда значок становится кнопкой «играть»
     v.play().catch(() => {});
@@ -333,6 +337,7 @@ const vio = new IntersectionObserver(es => es.forEach(e => {
 const preIO = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   const v = e.target;
+  if (v.dataset.poster) { v.poster = v.dataset.poster; delete v.dataset.poster; }
   if (v.dataset.src) { v.src = innerWidth < 900 ? v.dataset.srcS : v.dataset.src; delete v.dataset.src; v.preload = 'auto'; v.load(); }
   preIO.unobserve(v);
 }), { rootMargin: '1600px 0px' });
@@ -394,6 +399,7 @@ function toggle(btn, body) {
     btn.setAttribute('aria-expanded', open);
     body.classList.toggle('open', open);
     if (open) {
+      body.querySelectorAll('img[data-lazy-src]').forEach(i => { if (i.dataset.lazySet) i.srcset = i.dataset.lazySet; i.src = i.dataset.lazySrc; i.loading = 'eager'; delete i.dataset.lazySrc; delete i.dataset.lazySet; });
       body.querySelectorAll('img[loading="lazy"]:not(.en)').forEach(i => i.loading = 'eager');
       if (body.querySelector('.al-hud')) loadHud();
       if (body.querySelector('.al-font')) loadFont();
