@@ -404,7 +404,7 @@ function toggle(btn, body) {
       if (body.querySelector('.al-hud')) loadHud();
       if (body.querySelector('.al-font')) loadFont();
     }
-    body.querySelectorAll('video').forEach(v => { if (open) vio.observe(v); else { vio.unobserve(v); v.pause(); } });
+    body.querySelectorAll('video').forEach(v => { if (open) { preIO.observe(v); vio.observe(v); } else { vio.unobserve(v); v.pause(); } });
   });
 }
 ROOT.querySelectorAll('.al-fold').forEach(f => toggle(f.querySelector('.al-fold-row'), f.querySelector('.al-fold-body')));
