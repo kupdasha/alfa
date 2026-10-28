@@ -301,12 +301,12 @@ ROOT.querySelectorAll('.al-ph img:not(.en)').forEach(img => {
   if (img.complete && img.naturalWidth) ok(); else img.addEventListener('load', ok, { once: true });
 });
 
-// скелет уходит, когда загрузились шрифты (или через 1,2 с)
+// скелет уходит, как только готов основной шрифт (он в preload) — или через 0,4 с; остальные начертания догружаются на живой странице
 const skel = document.getElementById('al-skel');
 let gone = false;
 const off = () => { if (gone) return; gone = true; skel && skel.classList.add('off'); document.documentElement.classList.add('al-ready'); setTimeout(() => skel && skel.remove(), 700); };
-(document.fonts ? document.fonts.ready : Promise.resolve()).then(off);
-setTimeout(off, 1200);
+(document.fonts && document.fonts.load ? document.fonts.load('500 20px "Golos Text"') : Promise.resolve()).then(off, off);
+setTimeout(off, 400);
 
 /* ---------- появление при прокрутке ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
