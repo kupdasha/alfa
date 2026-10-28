@@ -463,6 +463,16 @@ const close = () => {
 box.addEventListener('click', close);
 addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
 
+/* ---------- ссылки по странице (#v1, #faq…): прокрутка кодом. На сайте стоит <base href> на jsDelivr,
+   и обычный переход по #якорю увел бы на адрес base, а не по странице ---------- */
+ROOT.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  e.preventDefault();
+  const id = a.getAttribute('href').slice(1), el = id === 'top' ? ROOT : ROOT.querySelector('#' + id);
+  if (el) el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+});
+
 /* ---------- шапка: подсветка раздела; кнопка «наверх» ---------- */
 const up = ROOT.querySelector('.al-up');
 up.addEventListener('click', () => scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }));

@@ -429,6 +429,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
   .al-hud .it{zoom:calc(var(--z,1) * .8)}
   .al-font .abc{word-break:break-all}
   .al-font .aa{font-size:80px}
+  .al-font ul{flex-wrap:wrap;gap:8px 14px}
   .al-morph{padding-top:8px}
   .al-faq button span{font-size:21px}
   .al-end .al-h1{white-space:normal;font-size:clamp(36px,10.5vw,52px)}
@@ -436,4 +437,11 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
   .al-end .scene{width:min(76vw,320px)}
   .al-up{width:48px;height:48px;bottom:16px}
   .al-box{padding:8px}
+}
+/* ---------- узкий телефон (320–400): блок шрифта в один столбец ---------- */
+@media (max-width:400px){
+  .al-font{grid-template-columns:minmax(0,1fr)}
+  .al-font .aa{font-size:64px}
+  .al-font .abc{grid-column:1}
+  .al-title .big{font-size:40px}
 }
