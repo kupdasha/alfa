@@ -11,17 +11,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preload" href="fonts/GolosText-500-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<!-- два источника наперегонки: стили и код запрашиваются сразу и с jsDelivr (через <base>, его ставит воркер), и с воркера;
-     кто ответил первым — тот и собирает страницу, а его адрес становится базовым для картинок, шрифтов и роликов (al.js сам переставляет <base>).
-     Стили подключаются скриптом — такие не блокируют отрисовку, если один из источников завис -->
-<script>
-(function(){var W='https://kup-version.kupdaria26.workers.dev/alfa/';
-function css(h){var l=document.createElement('link');l.rel='stylesheet';l.href=h;l.onload=function(){window.alCss=1};document.head.appendChild(l)}
-css('al.css');css(W+'al.css');
-var s=document.createElement('script');s.src=W+'al.js';s.async=true;document.head.appendChild(s);})();
-</script>
-<!-- сторож: если через 15 с страницы нет ни с одного источника — просьба обновить (стоит выше всего, что может зависнуть) -->
-<script>setTimeout(function(){var k=document.getElementById('al-skel');if(k&&!document.getElementById('al').children.length){k.innerHTML='<p style="font:500 20px/1.4 system-ui,sans-serif;color:#121314;max-width:30ch;margin:0 0 40vh">Страница не загрузилась. Обновите ее, пожалуйста</p>';k.style.justifyContent='center';}},15000)</script>
+<link rel="stylesheet" href="al.css">
 <style>html,body{margin:0;background:#fff}</style>
 </head>
 <body>
