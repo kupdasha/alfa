@@ -48,8 +48,6 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 
 /* ---------- картинки ---------- */
 .al-ph{position:relative;overflow:hidden;background:var(--soft);aspect-ratio:var(--r)}
-.al-ph::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);background-size:220% 100%;animation:al-shine 1.3s linear infinite}
-.al-ph.ok::before{display:none}
 .al-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s var(--ease),transform 1.1s var(--ease)}
 .al-ph.ok img:not(.en){opacity:1}
 .al-ph.zoom{cursor:zoom-in}
@@ -138,22 +136,22 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-card{position:relative;display:flex;align-items:flex-end;aspect-ratio:16/10;overflow:hidden;isolation:isolate;padding:clamp(24px,3vw,48px)}
 .al-card b{position:relative;z-index:1;display:inline-flex;align-items:center;gap:14px;font-weight:500;font-size:clamp(28px,3vw,52px);letter-spacing:-.03em;line-height:1}
 @media (hover:hover){.al-card:hover .g{transform:scale(1.08)}.al-card:hover .hud i{--o:6px}}
-.al-card .g{position:absolute;inset:-20%;z-index:-1;filter:blur(clamp(40px,5vw,80px));transition:transform 1.2s var(--ease)}
-.al-card .g i{position:absolute;width:62%;aspect-ratio:1;border-radius:50%;animation:al-drift 14s ease-in-out infinite alternate}
+.al-card .g{position:absolute;inset:-20%;z-index:-1;transition:transform 1.2s var(--ease)}
+.al-card .g i{position:absolute;width:90%;aspect-ratio:1;margin:-14%;background:radial-gradient(closest-side,var(--c),transparent);animation:al-drift 14s ease-in-out infinite alternate;will-change:transform}
 .al-card .g i:nth-child(1){left:-6%;top:28%;animation-duration:13s}
 .al-card .g i:nth-child(2){left:38%;top:50%;animation-duration:17s;animation-delay:-4s}
 .al-card .g i:nth-child(3){left:46%;top:-8%;animation-duration:15s;animation-delay:-8s}
 .al-card .g i:nth-child(4){left:14%;top:-16%;width:40%;animation-duration:19s;animation-delay:-2s}
 .al-card.dark{background:#060608;color:#fff}
-.al-card.dark .g i:nth-child(1){background:#3BFFA9;opacity:.55;width:44%;left:-10%;top:58%}
-.al-card.dark .g i:nth-child(2){background:#7B2FF7;opacity:.7;width:46%}
-.al-card.dark .g i:nth-child(3){background:#2A5BEF;opacity:.45;width:36%;left:70%;top:62%}
-.al-card.dark .g i:nth-child(4){background:#060608;width:70%;left:10%;top:-20%}
+.al-card.dark .g i:nth-child(1){--c:#3BFFA9;opacity:.55;width:44%;left:-10%;top:58%}
+.al-card.dark .g i:nth-child(2){--c:#7B2FF7;opacity:.7;width:46%}
+.al-card.dark .g i:nth-child(3){--c:#2A5BEF;opacity:.45;width:36%;left:70%;top:62%}
+.al-card.dark .g i:nth-child(4){--c:#060608;width:70%;left:10%;top:-20%}
 .al-card.light{background:#E7ECF3;color:var(--ink)}
-.al-card.light .g i:nth-child(1){background:#A8F7D6}
-.al-card.light .g i:nth-child(2){background:#C9B6FF}
-.al-card.light .g i:nth-child(3){background:#B6D4FF}
-.al-card.light .g i:nth-child(4){background:#F2F5F9}
+.al-card.light .g i:nth-child(1){--c:#A8F7D6}
+.al-card.light .g i:nth-child(2){--c:#C9B6FF}
+.al-card.light .g i:nth-child(3){--c:#B6D4FF}
+.al-card.light .g i:nth-child(4){--c:#F2F5F9}
 @keyframes al-drift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(18%,-12%) scale(1.15)}66%{transform:translate(-14%,10%) scale(.92)}100%{transform:translate(10%,16%) scale(1.08)}}
 @media (prefers-reduced-motion:reduce){.al-card .g i{animation:none}}
 
@@ -169,6 +167,10 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-card.light .chk{right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-pop 4s ease-in-out infinite}
 .al-card.light .frame{left:52%;top:34%;width:clamp(64px,6vw,96px);animation:al-nudge 3.8s ease-in-out infinite}
 .al-card.light .line{right:0;bottom:8px;width:clamp(110px,10vw,160px);animation:al-scan 3.6s ease-in-out infinite -1s}
+
+/* свернутые блоки и карточки вне экрана не анимируются */
+.al-fold-body:not(.open) *{animation-play-state:paused!important}
+.al-cards.off *{animation-play-state:paused!important}
 
 /* ---------- главы ---------- */
 .al-sec{padding-top:clamp(120px,14vw,240px)}

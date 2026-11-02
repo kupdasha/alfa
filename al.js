@@ -318,6 +318,10 @@ cssReady.then(() => Promise.race([document.fonts && document.fonts.load ? docume
 // картинки внутри свернутых блоков: адрес убираем до раскрытия — иначе браузер грузит их сразу, свернутый блок лежит в зоне первого экрана
 ROOT.querySelectorAll('.al-fold-body img[src]').forEach(i => { i.dataset.lazySrc = i.getAttribute('src'); i.dataset.lazySet = i.getAttribute('srcset') || ''; i.removeAttribute('src'); i.removeAttribute('srcset'); });
 
+// карточки вне экрана не анимируются
+const cards = ROOT.querySelector('.al-cards');
+new IntersectionObserver(([e]) => cards.classList.toggle('off', !e.isIntersecting)).observe(cards);
+
 /* ---------- появление при прокрутке ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
