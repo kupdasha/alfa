@@ -11,7 +11,9 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preload" href="fonts/GolosText-500-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="al.css">
+<!-- запасной источник: если файл с jsDelivr не пришел (его блокируют), страница переключается на копию с воркера (workers.dev) -->
+<script>window.alFallback=function(){if(window.alFell)return;window.alFell=1;var b=document.querySelector('base'),o='https://kup-version.kupdaria26.workers.dev/alfa/';if(b)b.href=o;var l=document.createElement('link');l.rel='stylesheet';l.href=o+'al.css';document.head.appendChild(l);var s=document.createElement('script');s.src=o+'al.js';s.defer=true;document.head.appendChild(s)};</script>
+<link rel="stylesheet" href="al.css" onerror="alFallback()">
 <style>html,body{margin:0;background:#fff}</style>
 </head>
 <body>
@@ -25,7 +27,7 @@
 </div>
 <div id="al" class="al"></div>
 <!-- страховка: если код не загрузился или упал, скелет не висит вечно -->
-<script>setTimeout(function(){var k=document.getElementById('al-skel');if(k&&!document.getElementById('al').children.length){k.innerHTML='<p style="font:500 20px/1.4 system-ui,sans-serif;color:#121314;max-width:30ch;margin:0 0 40vh">Страница не загрузилась. Обновите ее, пожалуйста</p>';k.style.justifyContent='center';}},9000)</script>
-<script src="al.js" defer></script>
+<script>setTimeout(function(){var k=document.getElementById('al-skel');if(k&&!document.getElementById('al').children.length){if(!window.alFell){alFallback();return setTimeout(arguments.callee,9000)}k.innerHTML='<p style="font:500 20px/1.4 system-ui,sans-serif;color:#121314;max-width:30ch;margin:0 0 40vh">Страница не загрузилась. Обновите ее, пожалуйста</p>';k.style.justifyContent='center';}},9000)</script>
+<script src="al.js" defer onerror="alFallback()"></script>
 </body>
 </html>
