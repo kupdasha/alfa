@@ -1,7 +1,10 @@
 /* Тестовое задание в Альфа-Банк: «Дизайн-процесс в Альфа-Бизнес».
    Вся страница: тексты (как в макете «альфа.fig», без правок — только типографика), картинки и живые блоки. */
 (() => {
-if (window.alBooted) return; window.alBooted = 1;   // код мог прийти и с jsDelivr, и с запасного адреса — собираем страницу один раз
+if (window.alBooted) return; window.alBooted = 1;   // код приходит и с jsDelivr, и с воркера наперегонки — собирает страницу первый
+// адрес, с которого пришел код, становится базовым: картинки, шрифты и ролики пойдут с того же источника, который сейчас отвечает
+const me = document.currentScript && document.currentScript.src, baseEl = document.querySelector('base');
+if (me && baseEl) baseEl.href = me.replace(/[^/]*$/, '');
 const ROOT = document.getElementById('al');
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -308,8 +311,9 @@ ROOT.querySelectorAll('.al-ph img:not(.en)').forEach(img => {
 const skel = document.getElementById('al-skel');
 let gone = false;
 const off = () => { if (gone) return; gone = true; skel && skel.classList.add('off'); document.documentElement.classList.add('al-ready'); setTimeout(() => skel && skel.remove(), 700); };
-(document.fonts && document.fonts.load ? document.fonts.load('500 20px "Golos Text"') : Promise.resolve()).then(off, off);
-setTimeout(off, 400);
+// ждем стили (с любого источника) и основной шрифт, но не дольше 2,5 с
+const cssReady = new Promise(r => { const t = setInterval(() => { if (window.alCss) { clearInterval(t); r(); } }, 50); setTimeout(() => { clearInterval(t); r(); }, 2500); });
+cssReady.then(() => Promise.race([document.fonts && document.fonts.load ? document.fonts.load('500 20px "Golos Text"') : Promise.resolve(), new Promise(r => setTimeout(r, 400))])).then(off, off);
 
 // картинки внутри свернутых блоков: адрес убираем до раскрытия — иначе браузер грузит их сразу, свернутый блок лежит в зоне первого экрана
 ROOT.querySelectorAll('.al-fold-body img[src]').forEach(i => { i.dataset.lazySrc = i.getAttribute('src'); i.dataset.lazySet = i.getAttribute('srcset') || ''; i.removeAttribute('src'); i.removeAttribute('srcset'); });
