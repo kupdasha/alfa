@@ -1,6 +1,7 @@
 /* Тестовое задание в Альфа-Банк: «Дизайн-процесс в Альфа-Бизнес».
    Вся страница: тексты (как в макете «альфа.fig», без правок — только типографика), картинки и живые блоки. */
 (() => {
+if (window.alBooted) return; window.alBooted = 1;   // код мог прийти и с jsDelivr, и с запасного адреса — собираем страницу один раз
 const ROOT = document.getElementById('al');
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
