@@ -322,6 +322,9 @@ ROOT.querySelectorAll('.al-fold-body img[src]').forEach(i => { i.dataset.lazySrc
 const cards = ROOT.querySelector('.al-cards');
 new IntersectionObserver(([e]) => cards.classList.toggle('off', !e.isIntersecting)).observe(cards);
 
+// помним страницу на этом устройстве: если workers.dev в следующий раз не ответит, она откроется из памяти (адрес — от самой страницы, а не от <base>)
+if ('serviceWorker' in navigator && location.pathname === '/alfa/') navigator.serviceWorker.register(location.origin + '/alfa/sw.js', { scope: '/alfa/' }).catch(() => {});
+
 /* ---------- появление при прокрутке ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
