@@ -5,7 +5,7 @@ const ROOT = document.getElementById('al');
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // пропорции картинок (ширина к высоте) — чтобы место под картинку было до загрузки
-const R = {"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
+const R = {"dj/dj-pads":1.0,"dj/dj-maschine":1.4682,"dj/dj-ddjrx":1.4733,"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
 
 /* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы; ё → е (кроме фразы про «приёмку») ---------- */
 const SHORT = 'без|для|изо|над|под|про|при|что|как|или|его|уже|все|это|чем|где|кто|еще|так|нет|чтобы|если|когда|либо|хотя|ведь|пока|через|перед|после|между|около|среди|кроме|вроде';
@@ -82,7 +82,11 @@ const EYE = (cx, id) => `<clipPath id="${id}"><ellipse cx="${cx}" cy="124" rx="1
   <path d="M${cx - 19} 117h38" stroke="#121314" stroke-width="5" stroke-linecap="round"/>`;
 const TAXI = `<svg class="al-taxi" viewBox="0 0 520 300" aria-hidden="true">
   <g class="car">
-    <g class="bear"><g transform="translate(0 -26)">
+    <g class="bear"><g transform="translate(0 -46)">
+      <!-- тело и руки — под головой, плечи видны над дверью; правая рука тянется к рулю -->
+      <path d="M226 236c0-30 26-48 59-48s59 18 59 48v40H226z" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/>
+      <path d="M322 212c16 4 34-2 44-18" fill="none" stroke="#E8432F" stroke-width="16" stroke-linecap="round"/>
+      <path d="M322 212c16 4 34-2 44-18" fill="none" stroke="#3BFFA9" stroke-width="4" stroke-linecap="round"/>
       <circle cx="226" cy="64" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="226" cy="64" r="10" fill="#C2301F"/>
       <circle cx="344" cy="64" r="24" fill="#E8432F" stroke="#3BFFA9" stroke-width="8"/><circle cx="344" cy="64" r="10" fill="#C2301F"/>
       <ellipse cx="285" cy="128" rx="78" ry="70" fill="#E8432F" stroke="#3BFFA9" stroke-width="9"/>
@@ -91,9 +95,13 @@ const TAXI = `<svg class="al-taxi" viewBox="0 0 520 300" aria-hidden="true">
       <ellipse cx="285" cy="150" rx="9" ry="6" fill="#8E1B12"/>
       <path d="M266 164q22 12 42-4" stroke="#121314" stroke-width="5" fill="none" stroke-linecap="round"/>
       <path d="M294 165q4 14 14 4l-4-8z" fill="#F79AB1"/>
+      <circle cx="368" cy="193" r="10" fill="#E8432F" stroke="#3BFFA9" stroke-width="4"/>
     </g></g>
-    <path d="M384 172 404 116h10l-16 56z" fill="#2A2B2E"/>
-    <path d="M370 172 392 118h12l-20 54z" fill="#CFEFFF" opacity=".55"/>
+    <!-- руль и лобовое стекло: стекло наклонено назад, кабина впереди, машина едет вправо -->
+    <circle cx="378" cy="150" r="22" fill="none" stroke="#2A2B2E" stroke-width="6"/>
+    <path d="M378 128v44M356 150h44" stroke="#2A2B2E" stroke-width="4"/>
+    <path d="M404 172 384 104h10l20 68z" fill="#2A2B2E"/>
+    <path d="M418 172 396 110h12l24 62z" fill="#CFEFFF" opacity=".55"/>
     <rect x="58" y="168" width="414" height="84" rx="10" fill="#FFD21F"/>
     <rect x="58" y="230" width="414" height="22" fill="#F2B90F"/>
     <rect x="58" y="166" width="414" height="10" rx="5" fill="#FFE77A"/>
@@ -245,36 +253,23 @@ const html = `
       </div>
     </div></div>
   </div>
-  <h2 class="al-h3 al-res rv">результат</h2>
-  <div class="al-cards rv">
-    <a href="#v1" class="al-card dark"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${HUDS.dark}<b>первый вариант</b></a>
-    <a href="#v2" class="al-card light"><span class="g" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${HUDS.light}<b>второй вариант</b></a>
-  </div>
 </section>
 
 <!-- ============ первый вариант ============ -->
 <section class="al-sec al-wrap" id="v1">
   ${head('первый вариант')}
-  <div class="al-tx rv">${P('Я представила процесс как слаженный механизм, в центре которого три основных элемента. Они продолжаются в схеме, а вместе складываются в зелёную букву А — отсылку к логотипу дизайн-команды.', 'al-lead')}</div>
-  ${covers('v1', { note: EN_NOTE })}
-  <div class="al-tx al-tx-r rv">${P('С главной шестерёнки на обложке я беру три основных переключателя, о которых шла речь, увеличиваю их и ставлю под каждый блок схемы.', 'al-lead')}</div>
-  <div class="al-wide rv">${pic('v1-schema')}</div>
-  ${post('v1', 'post')}
-  <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
-  ${covers('v1', { light: true })}
-  ${fold('процесс', PROCESS1, 'dark')}
-</section>
-
-<!-- ============ второй вариант ============ -->
-<section class="al-sec al-wrap" id="v2">
-  ${head('второй вариант')}
   <div class="al-morph rv">
     <div class="vis">${LOGO}</div>
-    ${P('В схеме три главных блока, как и в логотипе. Поэтому я связала каждый элемент логотипа с блоком схемы.', 'al-lead')}
+    ${P('В схеме три главных блока, как и в логотипе, — я связала их один к одному.', 'al-lead')}
+  </div>
+  <div class="al-dj rv">
+    <div class="al-tx"><div><h3 class="al-h3 first">${T('диджейский пульт, собранный из логотипа')}</h3>
+      ${P('Три блока стали крутилкой, пэдом и клавишей на одной панели.', 'al-lead')}
+      ${P('Диджей сводит дорожки в одно звучание. Дизайн-команда так же сводит задачи бизнеса, запросы клиентов и характер бренда в один цельный опыт общения с банком. Всё нужно настроить, состыковать и услышать свою аудиторию.', 'al-p')}</div></div>
+    ${row(['dj/dj-pads', 'dj/dj-maschine', 'dj/dj-ddjrx'])}
   </div>
   ${covers('v2', { note: EN_NOTE, caption: 'Логотип я поставила в правый угол, хотя в референсах он стоит в левом. Слева не складывалась композиция, и я решила, что такое отступление допустимо.' })}
-  <div class="al-tx al-tx-r rv">${P('В схеме я взяла те же три блока, что и на основном лендинге. Только трубки разложила горизонтально, а не зигзагом, так схему легче читать.', 'al-lead')}
-    ${P('В слове "приёмка" я убрала букву Ё: сейчас её обычно не ставят. Но это зависит от редполитики компании.')}</div>
+  <div class="al-tx rv">${P('В слове "приёмка" я убрала букву Ё: сейчас её обычно не ставят. Но это зависит от редполитики компании.', 'al-lead')}</div>
   <div class="al-wide rv">${pic('v2-schema')}</div>
   ${post('v2', 'post2')}
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому фону больше подходит один крупный элемент, но такой элемент будет трудно связать со схемой. Поэтому стекло, возможно, лучше не брать для этой задачи и приберечь для более минималистичных.', 'al-lead')}</div>
@@ -282,10 +277,39 @@ const html = `
   ${fold('процесс', PROCESS2, 'dark')}
 </section>
 
+<!-- ============ второй вариант ============ -->
+<section class="al-sec al-wrap" id="v2">
+  ${head('второй вариант')}
+  <div class="al-tx rv">${P('Я представила процесс как слаженный механизм, в центре которого три основных элемента из схемы с процессом. Вместе они складываются в зелёную букву А — отсылку к логотипу дизайн-команды.', 'al-lead')}</div>
+  ${covers('v1', { note: EN_NOTE })}
+  <div class="al-tx al-tx-r rv">${P('С главной шестерёнки на обложке я беру три основных переключателя, о которых шла речь, увеличиваю их и ставлю под каждый блок схемы.', 'al-lead')}</div>
+  <div class="al-wide rv">${pic('v1-schema')}</div>
+  ${post('v1', 'post')}
+  <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
+  ${covers('v1', { light: true })}
+  <div class="al-notes rv">
+    <h3 class="al-h3">${T('нюансы')}</h3>
+    <div class="al-note-grid">${[
+      ['надписи не в перспективе', 'Надписи на кнопках лежат ровно, так они легче читаются. Но можно сделать и в перспективе для реализма.'],
+      ['крутилки задевают друг друга', 'Три сцепленные крутилки — не прибор, а схема: сцепление показывает, что этапы discovery не идут по отдельности, каждый тянет за собой соседний. Можно развести их по панели.'],
+      ['шестеренки — старомодно?', 'Шестеренки взяты как самый считываемый знак процесса, чтобы схема читалась без объяснений. Первый вариант как раз отвечает на этот вопрос: тот же процесс без индустриальной темы, через пульт.'],
+    ].map(([h, t]) => `<div><b>${T(h)}</b>${P(t)}</div>`).join('')}</div>
+  </div>
+  ${fold('процесс', PROCESS1, 'dark')}
+</section>
+
 <!-- ============ вопросы и финал ============ -->
 <section class="al-sec al-wrap" id="faq">
   <div class="al-faq rv">${FAQ.map(([q, a]) => `<div class="qa"><button aria-expanded="false"><span>${T(q)}</span><i class="pm" aria-hidden="true"></i></button>
     <div class="ans"><div class="in">${P(a, 'al-lead')}</div></div></div>`).join('')}</div>
+</section>
+
+<section class="al-sec al-wrap al-sum" id="sum">
+  ${head('саммари')}
+  <div class="al-cards rv">
+    <a href="#v1" class="al-card" aria-label="первый вариант"><img src="img/v2-cover-s.webp" srcset="img/v2-cover-s.webp 900w, img/v2-cover.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></a>
+    <a href="#v2" class="al-card" aria-label="второй вариант"><img src="img/v1-cover-s.webp" srcset="img/v1-cover-s.webp 900w, img/v1-cover.webp 1920w" sizes="(max-width: 900px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></a>
+  </div>
 </section>
 
 <section class="al-end">
@@ -313,8 +337,6 @@ const off = () => { if (gone) return; gone = true; skel && skel.classList.add('o
 ROOT.querySelectorAll('.al-fold-body img[src]').forEach(i => { i.dataset.lazySrc = i.getAttribute('src'); i.dataset.lazySet = i.getAttribute('srcset') || ''; i.removeAttribute('src'); i.removeAttribute('srcset'); });
 
 // карточки вне экрана не анимируются
-const cards = ROOT.querySelector('.al-cards');
-new IntersectionObserver(([e]) => cards.classList.toggle('off', !e.isIntersecting)).observe(cards);
 
 // сервис-воркер больше не используется: снимаем его с устройств, где он успел встать
 if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(l => l.forEach(r => r.unregister())).catch(() => {});

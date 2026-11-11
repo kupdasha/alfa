@@ -7,7 +7,7 @@
 
 .al{
   --ink:#121314; --paper:#fff; --soft:#F2F2F3; --line:#E4E5E8; --mute:#6E7178; --red:#EF3124; --green:#3BFFA9;
-  --font:"Golos Text",system-ui,sans-serif; --pad:clamp(16px,4vw,64px); --max:1600px; --gap:clamp(8px,1vw,16px);
+  --font:"Golos Text",system-ui,sans-serif; --pad:clamp(16px,4vw,64px); --max:1600px; --gap:clamp(8px,1vw,16px); --chap:clamp(80px,9vw,152px);
   --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.3,1.4,.5,1);
   background:var(--paper);color:var(--ink);font:400 18px/1.45 var(--font);-webkit-font-smoothing:antialiased;overflow-x:clip;
 }
@@ -76,7 +76,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 /* ---------- раскрывающиеся строки: задача и процесс ---------- */
 .al-fold{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .al-task{margin-top:clamp(40px,5vw,80px)}
-.al-sec .al-fold{margin-top:clamp(72px,8vw,136px)}
+.al-sec .al-fold{margin-top:var(--chap)}
 /* строка «процесс» — черная плашка, чтобы ее нельзя было пропустить; содержимое под ней как было */
 .al-fold.dark{border:0}
 .al-fold.dark>.al-fold-row{background:var(--ink);color:#fff;padding:22px clamp(24px,3vw,48px);min-height:96px;transition:background .3s}
@@ -130,61 +130,29 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-font li.on{color:var(--ink)}
 .al-font .abc{grid-column:1 / -1;font-size:clamp(17px,1.3vw,21px);line-height:1.4;letter-spacing:.01em}
 
-/* ---------- карточки вариантов: переливающиеся градиенты в цветах Альфы ---------- */
-.al .al-res{margin:clamp(96px,10vw,176px) 0 clamp(20px,2vw,32px)}
+/* ---------- два варианта: карточки — сами обложки, подпись на затемнении снизу ---------- */
 .al-cards{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.al-card{position:relative;display:flex;align-items:flex-end;aspect-ratio:16/10;overflow:hidden;isolation:isolate;padding:clamp(24px,3vw,48px)}
-.al-card b{position:relative;z-index:1;display:inline-flex;align-items:center;gap:14px;font-weight:500;font-size:clamp(28px,3vw,52px);letter-spacing:-.03em;line-height:1}
-@media (hover:hover){.al-card:hover .g{transform:scale(1.08)}.al-card:hover .hud i{--o:6px}}
-.al-card .g{position:absolute;inset:-20%;z-index:-1;transition:transform 1.2s var(--ease)}
-.al-card .g i{position:absolute;width:90%;aspect-ratio:1;margin:-14%;background:radial-gradient(closest-side,var(--c),transparent);animation:al-drift 14s ease-in-out infinite alternate;will-change:transform}
-.al-card .g i:nth-child(1){left:-6%;top:28%;animation-duration:13s}
-.al-card .g i:nth-child(2){left:38%;top:50%;animation-duration:17s;animation-delay:-4s}
-.al-card .g i:nth-child(3){left:46%;top:-8%;animation-duration:15s;animation-delay:-8s}
-.al-card .g i:nth-child(4){left:14%;top:-16%;width:40%;animation-duration:19s;animation-delay:-2s}
-.al-card.dark{background:#060608;color:#fff}
-.al-card.dark .g i:nth-child(1){--c:#3BFFA9;opacity:.55;width:44%;left:-10%;top:58%}
-.al-card.dark .g i:nth-child(2){--c:#7B2FF7;opacity:.7;width:46%}
-.al-card.dark .g i:nth-child(3){--c:#2A5BEF;opacity:.45;width:36%;left:70%;top:62%}
-.al-card.dark .g i:nth-child(4){--c:#060608;width:70%;left:10%;top:-20%}
-.al-card.light{background:#E7ECF3;color:var(--ink)}
-.al-card.light .g i:nth-child(1){--c:#A8F7D6}
-.al-card.light .g i:nth-child(2){--c:#C9B6FF}
-.al-card.light .g i:nth-child(3){--c:#B6D4FF}
-.al-card.light .g i:nth-child(4){--c:#F2F5F9}
-@keyframes al-drift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(18%,-12%) scale(1.15)}66%{transform:translate(-14%,10%) scale(.92)}100%{transform:translate(10%,16%) scale(1.08)}}
-@media (prefers-reduced-motion:reduce){.al-card .g i{animation:none}}
-
-/* HUD-уголки на карточках */
-.al-card .hud{position:absolute;inset:clamp(14px,1.6vw,24px);z-index:1;pointer-events:none}
-.al-card .hud i{--o:0px;position:absolute;width:clamp(20px,2vw,32px);aspect-ratio:1;border:0 solid #EF3124;transition:transform .6s var(--ease)}
-.al-card .hud .tl{left:0;top:0;border-width:2px 0 0 2px;transform:translate(var(--o),var(--o))}
-.al-card .hud .tr{right:0;top:0;border-width:2px 2px 0 0;transform:translate(calc(var(--o) * -1),var(--o))}
-.al-card .hud .e{position:absolute;height:auto}
-.al-card.dark .px{right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-blink 3.6s ease-in-out infinite}
-.al-card.dark .cross{left:38%;top:30%;width:clamp(28px,2.6vw,40px);animation:al-pop 4.2s ease-in-out infinite}
-.al-card.dark .ind{right:0;bottom:6px;width:clamp(64px,5.6vw,88px);animation:al-scan 3.2s ease-in-out infinite}
-.al-card.light .chk{right:clamp(28px,3vw,48px);top:clamp(28px,3vw,48px);width:clamp(28px,2.6vw,40px);animation:al-pop 4s ease-in-out infinite}
-.al-card.light .frame{left:52%;top:34%;width:clamp(64px,6vw,96px);animation:al-nudge 3.8s ease-in-out infinite}
-.al-card.light .line{right:0;bottom:8px;width:clamp(110px,10vw,160px);animation:al-scan 3.6s ease-in-out infinite -1s}
-
-/* свернутые блоки и карточки вне экрана не анимируются */
-.al-fold-body:not(.open) *{animation-play-state:paused!important}
-.al-cards.off *{animation-play-state:paused!important}
+.al-card{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#111}
+.al-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+@media (hover:hover){.al-card:hover img{transform:scale(1.04)}}
 
 /* ---------- главы ---------- */
 .al-sec{padding-top:clamp(120px,14vw,240px)}
+/* между двумя концепциями — еще больше воздуха */
+.al-sec#v2{padding-top:clamp(180px,22vw,360px)}
 .al-head{margin-bottom:clamp(32px,4vw,64px)}
 .al .al-h4{font-weight:500;font-size:clamp(20px,1.7vw,28px);line-height:1.15;letter-spacing:-.015em;margin:clamp(48px,5vw,80px) 0 clamp(16px,1.6vw,24px)}
 .al-fold .al-h3:not(.first){margin-top:clamp(80px,9vw,144px)}
 .al-tx{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);margin:0 0 clamp(28px,3vw,48px)}
 .al-tx>*{grid-column:1}
-.al-tx-r{grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:clamp(72px,8vw,136px)}
+.al-tx-r{grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:var(--chap)}
 .al-tx-r>*{grid-column:2}
 .al-tx-r .al-lead+.al-p{margin-top:1em}
-.al-wide{margin-bottom:var(--gap)}
-.al-wide+.al-tx,.al-jr+.al-tx{margin-top:clamp(56px,6vw,104px)}
+.al-wide{margin-bottom:0}
+.al-wide+.al-tx,.al-jr+.al-tx,.al-post-stage+.al-tx{margin-top:var(--chap)}
+.al-covers+.al-tx:not(.al-tx-r){margin-top:clamp(56px,6vw,96px)}
 .al-covers{margin-top:clamp(32px,4vw,56px)}
+.al-dj+.al-covers{margin-top:0}
 .al-covers+.al-covers{margin-top:var(--gap)}
 .al-pair{display:grid;grid-template-columns:minmax(0,1.7778fr) minmax(0,1fr);gap:var(--gap)}
 .al-covers .al-cap{max-width:56ch;margin-top:14px}
@@ -234,7 +202,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-story .al-cap.r{text-align:right}
 
 /* ---------- мокап поста во внутреннем сообществе: помещается на экран целиком ---------- */
-.al-post-stage{display:flex;justify-content:center;padding:clamp(40px,4vw,72px) 0;background:var(--soft);margin-bottom:var(--gap)}
+.al-post-stage{display:flex;justify-content:center;padding:clamp(40px,4vw,72px) 0;background:var(--soft);margin:var(--chap) 0 0}
 .al-post{--side:min(560px,calc(100svh - 330px));width:max(360px,var(--side));background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(18,19,20,.06),0 12px 40px rgba(18,19,20,.06)}
 .al-post header{display:flex;align-items:center;gap:12px;padding:16px 20px 0}
 .al-post .av{width:40px;height:40px;border-radius:50%;flex:none}
@@ -315,7 +283,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 @media (prefers-reduced-motion:reduce){.al-hud .it{animation:none!important}}
 
 /* ---------- логотип ⇄ схема: крупно по центру ---------- */
-.al-morph{display:flex;flex-direction:column;align-items:center;gap:clamp(32px,4vw,56px);text-align:center;padding:clamp(24px,4vw,64px) 0 0;margin-bottom:clamp(72px,8vw,136px)}
+.al-morph{display:flex;flex-direction:column;align-items:center;gap:clamp(32px,4vw,56px);text-align:center;padding:0;margin:0 0 var(--chap)}
 .al-morph .vis{width:min(100%,1080px)}
 .al-morph .al-lead{max-width:34ch;text-wrap:balance}
 .al-morph-svg{width:100%;height:auto;overflow:visible}
@@ -330,6 +298,19 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-morph.scheme .c,.al-morph.scheme .pill{fill:#2B2C2C}
 .al-morph.scheme .letters path{opacity:0;transform:scale(1.3)}
 .al-morph.scheme .shapes path{opacity:1;transform:none}
+
+/* ---------- «что бы доделала»: четыре ответа на вопросы к механизму ---------- */
+.al-notes{margin-top:var(--chap)}
+.al .al-notes .al-h3{margin:0 0 clamp(20px,2.4vw,36px)}
+.al-note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,3vw,48px) clamp(32px,5vw,96px)}
+.al-note-grid b{display:block;font-weight:500;font-size:clamp(18px,1.4vw,22px);margin-bottom:8px}
+@media (max-width:640px){.al-note-grid{grid-template-columns:minmax(0,1fr)}}
+/* саммари в конце: две обложки без подписей, ведут к вариантам */
+.al-sum .al-head{margin-bottom:clamp(20px,2.4vw,36px)}
+
+/* ---------- пульт диджея во втором варианте ---------- */
+.al-dj{margin-bottom:var(--chap)}
+.al-dj .al-jr .al-ph{background:#fff}
 
 /* ---------- вопросы ---------- */
 .al-faq{border-top:1px solid var(--line);max-width:1100px}
@@ -406,8 +387,6 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
   .pm{width:44px;height:44px}
   .al-brief{grid-template-columns:1fr 1fr}
   .al-cards{grid-template-columns:minmax(0,1fr)}
-  .al-card{aspect-ratio:16/11}
-  .al-card b{font-size:28px}
   .al-pair{grid-template-columns:minmax(0,1fr)}
   .al-lang{gap:14px}
   .al-lang .al-note{min-width:0;flex-basis:100%}
