@@ -238,7 +238,7 @@ const html = `
 
 <section class="al-hero al-wrap" id="top">
   <h1 class="al-title rv"><span class="big">тестовое задание</span>
-    <span class="sub">${T('в Альфа-Банк на ведущего дизайнера внутренних коммуникаций', false)}</span></h1>
+    <span class="sub">${T('в Альфа-Банк на ведущего\u00a0дизайнера внутренних\u00a0коммуникаций', false)}</span></h1>
   <div class="al-fold al-task rv">
     <button class="al-fold-row" aria-expanded="false"><span>задача</span><i class="pm" aria-hidden="true"></i></button>
     <div class="al-fold-body"><div class="in">
@@ -515,12 +515,13 @@ const up = ROOT.querySelector('.al-up');
 up.addEventListener('click', () => scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }));
 const links = [...ROOT.querySelectorAll('.al-top nav a')];
 const secs = links.map(a => ROOT.querySelector(a.getAttribute('href')));
+const endEl = ROOT.querySelector('.al-end');
 let tick = false;
 addEventListener('scroll', () => {
   if (tick) return; tick = true;
   requestAnimationFrame(() => {
     tick = false;
-    up.classList.toggle('on', scrollY > innerHeight * .8);
+    up.classList.toggle('on', scrollY > innerHeight * .8 && !(endEl && endEl.getBoundingClientRect().top < innerHeight * .75));
     let cur = -1; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * .4) cur = i; });
     links.forEach((a, i) => a.classList.toggle('on', i === cur));
   });
