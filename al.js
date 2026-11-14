@@ -7,12 +7,12 @@ const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // пропорции картинок (ширина к высоте) — чтобы место под картинку было до загрузки
 const R = {"dj/dj-pads":1.0,"dj/dj-maschine":1.4682,"dj/dj-ddjrx":1.4733,"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
 
-/* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы; ё → е (кроме фразы про «приёмку») ---------- */
+/* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы; ё → е (кроме фразы про букву Ё) ---------- */
 const SHORT = 'без|для|изо|над|под|про|при|что|как|или|его|уже|все|это|чем|где|кто|еще|так|нет|чтобы|если|когда|либо|хотя|ведь|пока|через|перед|после|между|около|среди|кроме|вроде';
 function ty(input, tail = true) {
   const NB = ' ';
   let s = String(input);
-  if (!/приёмк/.test(s)) s = s.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
+  if (!/приёмк|Букву Ё/.test(s)) s = s.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
   s = s.replace(/(^|[\s (\[—-])"/g, '$1«').replace(/"/g, '»');
   s = s.replace(/(\d)\s*[хx]\s*(\d)/g, '$1×$2');                       // 1920×1080
   s = s.replace(/[ \t]+[-–—][ \t]+/g, NB + '— ');                       // тире держится за слово слева
@@ -35,10 +35,12 @@ const T = (s, tail) => esc(ty(s, tail)).replace(/\n/g, '<br>')
 const P = (s, cls = 'al-p') => `<p class="${cls}">${T(s)}</p>`;
 
 /* ---------- картинка: легкая копия для телефона, полная — для компьютера и крупного просмотра ---------- */
-function pic(name, { alt = '', cls = '', eager = false, zoom = true, ratio } = {}) {
-  const r = ratio || R[name] || 1.7778;
-  return `<figure class="al-ph ${cls}${zoom ? ' zoom' : ''}" style="--r:${r}" data-full="img/${name}.webp">
-    <img src="img/${name}-s.webp" srcset="img/${name}-s.webp 900w, img/${name}.webp 1920w" sizes="(max-width: 900px) 100vw, 60vw"
+// версии замененных картинок: новый адрес, чтобы браузер не показывал старую копию из кеша
+const IV = {'v1-schema': 'c22f8553'};
+function pic(name, { alt = '', cls = '', eager = false, zoom = true, ratio, sizes = '(max-width: 900px) 100vw, 60vw' } = {}) {
+  const r = ratio || R[name] || 1.7778, q = IV[name] ? `?v=${IV[name]}` : '';
+  return `<figure class="al-ph ${cls}${zoom ? ' zoom' : ''}" style="--r:${r}" data-full="img/${name}.webp${q}">
+    <img src="img/${name}-s.webp${q}" srcset="img/${name}-s.webp${q} 900w, img/${name}.webp${q} 1920w" sizes="${sizes}"
       alt="${alt}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></figure>`;
 }
 const head = (h, id) => `<header class="al-head rv"${id ? ` id="${id}"` : ''}><h2 class="al-h2">${T(h)}</h2></header>`;
@@ -269,8 +271,8 @@ const html = `
     ${row(['dj/dj-pads', 'dj/dj-maschine', 'dj/dj-ddjrx'])}
   </div>
   ${covers('v2', { note: EN_NOTE, caption: 'Логотип я поставила в правый угол, хотя в референсах он стоит в левом. Слева не складывалась композиция, и я решила, что такое отступление допустимо.' })}
-  <div class="al-tx rv">${P('В слове "приёмка" я убрала букву Ё: сейчас её обычно не ставят. Но это зависит от редполитики компании.', 'al-lead')}</div>
-  <div class="al-wide rv">${pic('v2-schema')}</div>
+  <div class="al-tx rv">${P('Букву Ё я не ставила: по правилам она необязательна, если смысл и так понятен. Если в редполитике Альфы принято ее писать, верну.', 'al-lead')}</div>
+  <div class="al-wide rv">${pic('v2-schema', { sizes: '100vw' })}</div>
   ${post('v2', 'post2')}
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому фону больше подходит один крупный элемент, но такой элемент будет трудно связать со схемой. Поэтому стекло, возможно, лучше не брать для этой задачи и приберечь для более минималистичных.', 'al-lead')}</div>
   ${covers('v2', { light: true })}
@@ -283,7 +285,7 @@ const html = `
   <div class="al-tx rv">${P('Я представила процесс как слаженный механизм, в центре которого три основных элемента из схемы с процессом. Вместе они складываются в зелёную букву А — отсылку к логотипу дизайн-команды.', 'al-lead')}</div>
   ${covers('v1', { note: EN_NOTE })}
   <div class="al-tx al-tx-r rv">${P('С главной шестерёнки на обложке я беру три основных переключателя, о которых шла речь, увеличиваю их и ставлю под каждый блок схемы.', 'al-lead')}</div>
-  <div class="al-wide rv">${pic('v1-schema')}</div>
+  <div class="al-wide rv">${pic('v1-schema', { sizes: '100vw' })}</div>
   ${post('v1', 'post')}
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому подходит один крупный элемент, но связать его со схемой будет трудно. Поэтому стекло, возможно, стоит не брать сюда, а приберечь для более минималистичных задач.', 'al-lead')}</div>
   ${covers('v1', { light: true })}

@@ -202,7 +202,10 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-story .al-cap.r{text-align:right}
 
 /* ---------- мокап поста во внутреннем сообществе: помещается на экран целиком ---------- */
-.al-post-stage{display:flex;justify-content:center;padding:clamp(40px,4vw,72px) 0;background:var(--soft);margin:var(--chap) 0 0}
+.al-post-stage{display:flex;justify-content:center;padding:clamp(40px,4vw,72px) 0;margin:var(--chap) 0 0;position:relative}
+/* серая полоса под постом — во всю ширину экрана */
+.al-post-stage::before{content:"";position:absolute;top:0;bottom:0;left:-100vmax;right:-100vmax;background:var(--soft)}
+.al-post-stage>.al-post{position:relative}
 .al-post{--side:min(560px,calc(100svh - 330px));width:max(360px,var(--side));background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(18,19,20,.06),0 12px 40px rgba(18,19,20,.06)}
 .al-post header{display:flex;align-items:center;gap:12px;padding:16px 20px 0}
 .al-post .av{width:40px;height:40px;border-radius:50%;flex:none}
@@ -244,8 +247,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-post .ov *{transform-box:fill-box}
 .al-post .t1{animation:al-p-wipe 12s var(--ease) infinite}
 .al-post .t2{animation:al-p-rise 12s var(--ease) infinite .25s}
-.al-post .logo path{transform-origin:center;animation:al-p-pop 12s var(--spring) infinite}
-.al-post .ld{animation-delay:.12s!important}.al-post .lc{animation-delay:.24s!important}
+/* логотип ADC виден всегда */
 .al-post .vl{animation:al-p-up 12s var(--ease) infinite .4s}
 .al-post .sq{transform-origin:center;animation:al-spin 6s linear infinite}
 .al-post .b1,.al-post .b2{animation:al-blink 3s ease-in-out infinite}.al-post .b2{animation-delay:-1.4s}
@@ -391,7 +393,6 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
   .al-lang{gap:14px}
   .al-lang .al-note{min-width:0;flex-basis:100%}
   /* схема на телефоне — целиком; по нажатию крупно, повернув телефон, — на весь экран */
-  .al-post-stage{margin-left:calc(var(--pad) * -1);margin-right:calc(var(--pad) * -1);padding:24px 12px}
   .al-post{width:100%;--side:100%}
   .al-post header{padding:14px 16px 0}
   .al-post .txt{padding:10px 16px 14px}
