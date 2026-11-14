@@ -11,7 +11,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preload" href="fonts/GolosText-500-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="al.css?v=1114">
+<!-- на localhost — всегда свежие файлы (новый адрес при каждом открытии), на сайте — по номеру версии -->
+<script>window.ALV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?Date.now():'1114';document.write('<link rel="stylesheet" href="al.css?v='+ALV+'">')</script>
 <style>html,body{margin:0;background:#fff}</style>
 </head>
 <body>
@@ -24,6 +25,6 @@
 <i style="width:100%;height:clamp(200px,40vw,560px)"></i>
 </div>
 <div id="al" class="al"></div>
-<script src="al.js?v=1114" defer></script>
+<script>document.write('<script src="al.js?v='+ALV+'" defer><\/script>')</script>
 </body>
 </html>
