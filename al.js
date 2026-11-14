@@ -36,7 +36,7 @@ const P = (s, cls = 'al-p') => `<p class="${cls}">${T(s)}</p>`;
 
 /* ---------- картинка: легкая копия для телефона, полная — для компьютера и крупного просмотра ---------- */
 // версии замененных картинок: новый адрес, чтобы браузер не показывал старую копию из кеша
-const IV = {'v1-schema': '84b51aaa', 'v2-schema': 'dddcfa55'};
+const IV = {'v1-schema': '84b51aaa', 'v2-schema': '3f4dd4dd'};
 function pic(name, { alt = '', cls = '', eager = false, zoom = true, ratio, sizes = '(max-width: 900px) 100vw, 60vw' } = {}) {
   const r = ratio || R[name] || 1.7778, q = IV[name] ? `?v=${IV[name]}` : '';
   return `<figure class="al-ph ${cls}${zoom ? ' zoom' : ''}" style="--r:${r}" data-full="img/${name}.webp${q}">
