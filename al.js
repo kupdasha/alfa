@@ -75,6 +75,17 @@ const LOGO = `<svg class="al-morph-svg" viewBox="0 0 905 253" aria-hidden="true"
     <path class="s3" d="M510.4 48.6c36.6 0 67.4 25.4 75.6 59.5h-65.4v36.3H586c-8.2 34.2-39 59.6-75.6 59.6-42.9 0-77.7-34.8-77.7-77.7s34.8-77.7 77.7-77.7z"/>
   </g>
 </svg>`;
+// логотип из задания (Альфа-Банк + ADC) — статичный, в блоке «задача»
+const TASK_LOGO = `<svg class="al-tlogo-svg" role="img" aria-label="логотипы Альфа-Банка и Alfa Design Community" viewBox="0 0 905 253">
+  <circle class="c" cx="126.4" cy="126.4" r="126.4"/>
+  <g transform="translate(174.8 52.1) scale(-1 1)"><g class="alfa"><path d="M0 127h98v21.8H0z"/><path d="M67.7 15.5C64.8 6.9 61.5 0 49.9 0 38.4 0 34.8 6.8 31.7 15.5L0 105.2h21l7.3-21.3h40.5l6.8 21.3H98zM34.5 65.9l14.4-42.5h.5l13.6 42.5z"/></g></g>
+  <rect class="pill" x="252.9" y="0" width="652.9" height="252.9" rx="126.4"/>
+  <g class="letters" transform="translate(319 49.6)">
+    <path class="l1" fill-rule="evenodd" d="M178.8 148.2H0L89.4 0zM44.4 108.4 31.2 130.2h116.4l-13.2-21.8zm11.1-18.3h67.8L89.4 34z"/>
+    <path class="l2" fill-rule="evenodd" d="M300.3 4.7c25.1 0 45.5 19.4 45.5 43.1v57.3c0 23.8-20.4 43.1-45.5 43.1H197.6V4.7zm-83.2 125h83.2c14.3 0 25.9-11 25.9-24.6V47.8c0-13.6-11.6-24.6-25.9-24.6h-83.2z"/>
+    <path class="l3" d="M444.1 0c32.9 0 62.2 20.7 72.9 51.6l2 5.7h-20.2C490.9 35 469.4 18.9 444 18.9c-32.1 0-58.1 25.8-58.1 57.5s26 57.5 58.1 57.5c26.3 0 48.5-17.3 55.7-41h20.1l-2.4 7.4c-10.5 31.5-39.9 52.6-73.3 52.6-42.6 0-77.2-34.3-77.2-76.5S401.5 0 444.1 0z"/>
+  </g>
+</svg>`;
 
 /* ---------- маскот в такси, вид сбоку: едет вправо, смотрит на курсор ---------- */
 const EYE = (cx, id) => `<clipPath id="${id}"><ellipse cx="${cx}" cy="124" rx="19" ry="17"/></clipPath>
@@ -190,7 +201,6 @@ const post = (v, video) => `<div class="al-post-stage rv"><article class="al-pos
 // палитра и шрифт из брендбука — живыми блоками, а не картинкой
 const PAL = [['Pantone 2597 CU', '#6A25CE'], ['Pantone 877 CU (металлик)', '#898989', 'metal'], ['Pantone 318 C', '#00E2E1']];
 const BRAND = `<div class="al-pal">${PAL.map(([n, c, k], i) => `<div class="sw ${k || ''}${c === '#00E2E1' ? ' lt' : ''}" style="--c:${c};--i:${i}"><span>${n}</span></div>`).join('')}</div>
-  <p class="al-cap">${T('Дополнительные цвета я спросила у дизайнера в Альфа-Бизнесе')}</p>
   <div class="al-font"><div class="aa">Аа</div><div class="meta"><b>Styrene A</b><ul><li class="on">Regular</li><li>Medium</li><li>Bold</li></ul></div>
     <p class="abc">АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ<br>абвгдежзийклмнопрстуфхцчшщэюя 0123456789</p></div>`;
 
@@ -210,6 +220,7 @@ const PROCESS1 = `
        ['фон', ['p1-sand', 'r-dunes', 'r-glass']]].map(([t, ns]) => `<div class="step"><b>${t}</b>
          <div>${row(ns)}${t === 'слой ИИ' ? `<p class="al-cap r">${T('ИИ-артефакты в мелких деталях')}</p>` : ''}</div></div>`).join('')}
   </div>
+  ${row(['d-knob', 'd-mini', 'd-key', 'd-ind'])}
 
   <h3 class="al-h3">HUD kit</h3>
   <div class="al-tx">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
@@ -229,8 +240,7 @@ const PROCESS2 = `
   <div class="al-tx"><div><h3 class="al-h3 first">как я работала</h3>
     <ul class="al-items plain">${['Собрала 3D-модель.', 'Сделала маску, в том числе учитывая прозрачное стекло.', 'На постпродакшене поправила свет и цвет и добавила фон.'].map(t => `<li>${T(t)}</li>`).join('')}</ul></div></div>
   ${row(['w-1', 'w-2', 'w-4'])}
-  <div class="al-jr"><div style="--r:${R['w-3']}">${pic('w-3')}</div><div style="--r:${R['d-console']}">${pic('d-console')}</div></div>
-  ${row(['d-knob', 'd-mini', 'd-key', 'd-ind'])}`;
+  <div class="al-jr"><div style="--r:${R['w-3']}">${pic('w-3')}</div><div style="--r:${R['d-console']}">${pic('d-console')}</div></div>`;
 
 const html = `
 <div class="al-top"><div class="al-wrap">
@@ -247,7 +257,7 @@ const html = `
       <div class="al-two">
         <div>${TASK.intro.split('\n').map(t => P(t, 'al-lead')).join('')}
           <ul class="al-items">${TASK.items.map(t => `<li>${T(t)}</li>`).join('')}</ul></div>
-        <div class="al-brief">${pic('t-update')}${pic('t-nba')}${pic('t-old', { cls: 'wide' })}</div>
+        <div class="al-brief"><figure class="al-tlogo wide">${TASK_LOGO}</figure>${pic('t-update')}${pic('t-nba')}${pic('t-old', { cls: 'wide' })}</div>
       </div>
       <div class="al-two al-analysis">
         <div><h3 class="al-h3 first">анализ</h3>${TASK.analysis.map(t => P(t)).join('')}</div>

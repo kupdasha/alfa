@@ -107,6 +107,9 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al .al-items.plain{margin-top:0}
 .al-brief{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 .al-brief .wide{grid-column:span 2}
+.al-tlogo{margin:0;padding:clamp(8px,1.5vw,20px) 0}
+.al-tlogo-svg{display:block;width:min(100%,520px);height:auto}
+.al-tlogo-svg .c{fill:#DC4433}.al-tlogo-svg .alfa{fill:#fff}.al-tlogo-svg .pill{fill:#7FFBB0}.al-tlogo-svg .letters path{fill:#000}
 
 /* ---------- палитра: полосы вырастают по очереди, при наведении раскрываются ---------- */
 .al-pal{display:flex;flex-direction:column;gap:4px}
