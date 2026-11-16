@@ -5,7 +5,7 @@ const ROOT = document.getElementById('al');
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // пропорции картинок (ширина к высоте) — чтобы место под картинку было до загрузки
-const R = {"dj/dj-pads":1.0,"dj/dj-maschine":1.4682,"dj/dj-ddjrx":1.4733,"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
+const R = {"dj/dj-pads":1.0,"dj/dj-maschine":1.4682,"dj/dj-ddjrx":1.4733,"ai1":1.3813,"ai2":1.6156,"d-console":1.7778,"d-ind":1,"d-key":1,"d-knob":1,"d-mini":1,"e-1":1.7778,"e-2":1.7778,"e-3":1.7778,"p1-angles":0.884,"p1-mask":1.7712,"p1-render":1.7712,"p1-sand":1.768,"p1-wire":1.7778,"r-black":1.7712,"r-dunes":1.7778,"r-glass":1.7778,"r-mask":1.7712,"s-forms":1.7778,"s-gears":1.7778,"s-layers":1.7778,"s-layers2":1.7778,"s-mech":1.7778,"s-pult":1.7778,"s-ring":1.7778,"s-steps":1.7778,"s-trassa":1.7778,"s-windows":1.7778,"t-nba":0.8,"t-old":2.533,"t-pantone":1.9433,"t-update":0.8,"v1-cover":1.7778,"v1-schema":1.7778,"v1-sq":1,"v2-cover":1.7778,"v2-schema":1.7778,"v2-sq":1,"v2-black":1.7778,"v2-black-ref":1.0034,"w-1":1.7712,"w-2":1.7712,"w-3":1.5648,"w-4":1.7778};
 
 /* ---------- типограф (как на kupdasha.ru): тире, «ёлочки», неразрывные пробелы; ё → е (кроме фразы про букву Ё) ---------- */
 const SHORT = 'без|для|изо|над|под|про|при|что|как|или|его|уже|все|это|чем|где|кто|еще|так|нет|чтобы|если|когда|либо|хотя|ведь|пока|через|перед|после|между|около|среди|кроме|вроде';
@@ -205,9 +205,6 @@ const BRAND = `<div class="al-pal">${PAL.map(([n, c, k], i) => `<div class="sw $
     <p class="abc">АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ<br>абвгдежзийклмнопрстуфхцчшщэюя 0123456789</p></div>`;
 
 const PROCESS1 = `
-  <div class="al-pipe">
-    ${['claude', 'blender', 'higgsfield', 'figma'].map((k, i) => `<div class="st" style="--i:${i}">${LOGOS[k]}<b>${{ claude: 'Claude', blender: 'Blender', higgsfield: 'Higgsfield', figma: 'Figma' }[k]}</b></div>`).join('<span class="ln"><i></i></span>')}
-  </div>
   <div class="al-split">
     <div>${P('Собрала иллюстрацию в 3D и попробовала разные ракурсы. Потом улучшила материалы с помощью нейросети, отрендерила маску и по ней вырезала элементы в 4K с высокой детализацией. Фон просчитала отдельно, чтобы проще было делать ресайзы.', 'al-lead')}
       ${P('Почему именно так? Так быстрее. В мелких деталях нет ИИ-артефактов, а на обычном ноутбуке не приходится тратить время на перерендеры.')}</div>
@@ -222,10 +219,6 @@ const PROCESS1 = `
   </div>
   ${row(['d-knob', 'd-mini', 'd-key', 'd-ind'])}
 
-  <h3 class="al-h3">HUD kit</h3>
-  <div class="al-tx">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
-  <div class="al-hud" aria-hidden="true"></div>
-
   <h3 class="al-h3">поиски</h3>
   <div class="al-tx">${P('Эскизы с Claude, я пробовала показать дизайн-процесс тремя способами: как поездку на такси (отсылка к собеседованию); бой на мечах или на ринге.', 'al-lead')}</div>
   ${row(['s-trassa', 's-mech', 's-forms', 's-ring'])}
@@ -235,12 +228,18 @@ const PROCESS1 = `
   ${row(['s-windows', 's-layers', 's-layers2'])}`;
 
 const PROCESS2 = `
+  <div class="al-pipe">
+    ${['claude', 'blender', 'higgsfield', 'figma'].map((k, i) => `<div class="st" style="--i:${i}">${LOGOS[k]}<b>${{ claude: 'Claude', blender: 'Blender', higgsfield: 'Higgsfield', figma: 'Figma' }[k]}</b></div>`).join('<span class="ln"><i></i></span>')}
+  </div>
   <div class="al-tx"><div><h3 class="al-h3 first">эскизы</h3>${P('Ещё я хотела сделать фигуры в стиле детских кубиков или сравнить процесс с азбукой: всё просто, как ABC. Но поняла, что такая логика уведёт далеко от технологичного чёрного бигтеха.', 'al-lead')}</div></div>
   ${row(['e-1', 'e-2', 'e-3'])}
   <div class="al-tx"><div><h3 class="al-h3 first">как я работала</h3>
     <ul class="al-items plain">${['Собрала 3D-модель.', 'Сделала маску, в том числе учитывая прозрачное стекло.', 'На постпродакшене поправила свет и цвет и добавила фон.'].map(t => `<li>${T(t)}</li>`).join('')}</ul></div></div>
   ${row(['w-1', 'w-2', 'w-4'])}
-  <div class="al-jr"><div style="--r:${R['w-3']}">${pic('w-3')}</div><div style="--r:${R['d-console']}">${pic('d-console')}</div></div>`;
+  <div class="al-jr"><div style="--r:${R['w-3']}">${pic('w-3')}</div><div style="--r:${R['d-console']}">${pic('d-console')}</div></div>
+  <h3 class="al-h3">HUD kit</h3>
+  <div class="al-tx">${P('Сгенерировала на основе макетов библиотеку векторных элементов', 'al-lead')}</div>
+  <div class="al-hud" aria-hidden="true"></div>`;
 
 const html = `
 <div class="al-top"><div class="al-wrap">
@@ -286,6 +285,11 @@ const html = `
   ${post('v2', 'post2')}
   <div class="al-tx rv">${P('Сложная 3D-конструкция лучше смотрится на тёмном фоне. Светлому фону больше подходит один крупный элемент, но такой элемент будет трудно связать со схемой. Поэтому стекло, возможно, лучше не брать для этой задачи и приберечь для более минималистичных.', 'al-lead')}</div>
   ${covers('v2', { light: true })}
+  <div class="al-alt rv">
+    <div class="al-tx"><div><h3 class="al-h3 first">${T('черные кнопки')}</h3>
+      ${P('Чтобы вариант выглядел серьезнее, кнопки можно сделать черными с цветной подсветкой. Так он ближе к референсам из задания, но связь с тремя блоками схемы читается не так явно.', 'al-lead')}</div></div>
+    ${row(['v2-black', 'v2-black-ref'])}
+  </div>
   ${fold('процесс', PROCESS2, 'dark')}
 </section>
 

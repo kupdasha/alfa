@@ -315,6 +315,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 
 /* ---------- пульт диджея во втором варианте ---------- */
 .al-dj{margin-bottom:var(--chap)}
+.al-alt{margin-top:var(--chap)}
 .al-dj .al-jr .al-ph{background:#fff}
 
 /* ---------- вопросы ---------- */
