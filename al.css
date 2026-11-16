@@ -180,7 +180,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-flip.is-en img.en{opacity:1;transform:none}
 
 /* ---------- пайплайн: Claude → Blender → Higgsfield → Figma ---------- */
-.al-pipe{display:flex;align-items:flex-start;justify-content:space-between;margin:clamp(16px,2vw,32px) 0 clamp(56px,6vw,96px)}
+.al-pipe{display:flex;align-items:flex-start;justify-content:space-between;margin:0 0 var(--chap)}
 .al-pipe .st{display:flex;flex-direction:column;align-items:center;gap:16px;flex:none;width:clamp(84px,8vw,128px)}
 .al-pipe .ic{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:23%;overflow:hidden;animation:al-step 6.4s var(--ease) infinite;animation-delay:calc(var(--i) * 1.6s)}
 .al-pipe .ic svg{width:52%;height:52%}
@@ -316,6 +316,9 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 /* ---------- пульт диджея во втором варианте ---------- */
 .al-dj{margin-bottom:var(--chap)}
 .al-alt{margin-top:var(--chap)}
+.al-post-stage+.al-covers{margin-top:var(--chap)}
+.al-fold .al-end-note{margin-top:var(--chap)}
+.al-story+.al-jr{margin-top:clamp(28px,3vw,43px)}
 .al-dj .al-jr .al-ph{background:#fff}
 
 /* ---------- вопросы ---------- */
