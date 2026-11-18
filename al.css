@@ -371,6 +371,10 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 .al-box.on img{transform:none}
 .al-box button{position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
 .al-box button svg{width:22px;height:22px}
+.al-box .nav{display:none;top:50%;margin-top:-24px;right:auto;left:clamp(12px,2vw,32px)}
+.al-box .nav.next{left:auto;right:clamp(12px,2vw,32px)}
+.al-box.many .nav{display:grid}
+@media (hover:hover){.al-box .nav{transition:transform .3s var(--ease)}.al-box .nav:hover{transform:scale(1.08)}}
 /* ---------- планшет ---------- */
 @media (max-width:1000px){
   .al-two,.al-tx,.al-tx-r,.al-split{grid-template-columns:minmax(0,1fr)}

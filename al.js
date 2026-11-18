@@ -36,7 +36,7 @@ const P = (s, cls = 'al-p') => `<p class="${cls}">${T(s)}</p>`;
 
 /* ---------- картинка: легкая копия для телефона, полная — для компьютера и крупного просмотра ---------- */
 // версии замененных картинок: новый адрес, чтобы браузер не показывал старую копию из кеша
-const IV = {'v1-schema': 'f5c5f55a', 'v2-schema': '92049244'};
+const IV = {'v1-schema': 'f5c5f55a', 'v2-schema': '785004dc'};
 function pic(name, { alt = '', cls = '', eager = false, zoom = true, ratio, sizes = '(max-width: 900px) 100vw, 60vw' } = {}) {
   const r = ratio || R[name] || 1.7778, q = IV[name] ? `?v=${IV[name]}` : '';
   return `<figure class="al-ph ${cls}${zoom ? ' zoom' : ''}" style="--r:${r}" data-full="img/${name}.webp${q}">
@@ -325,7 +325,7 @@ const html = `
   <div class="road"><div class="scene">${TAXI}</div><div class="asphalt"><i></i></div></div>
 </section>
 <button class="al-up" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-<div class="al-box" hidden><img alt=""><svg class="rot" viewBox="0 0 48 48" aria-hidden="true"><g class="ph"><rect x="17" y="8" width="14" height="24" rx="3"/><path d="M22 28h4"/></g><path class="ar" d="M10 30a14 14 0 0 0 14 10M24 40l-3-3M24 40l-3 3"/></svg><button aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
+<div class="al-box" hidden><img alt=""><svg class="rot" viewBox="0 0 48 48" aria-hidden="true"><g class="ph"><rect x="17" y="8" width="14" height="24" rx="3"/><path d="M22 28h4"/></g><path class="ar" d="M10 30a14 14 0 0 0 14 10M24 40l-3-3M24 40l-3 3"/></svg><button aria-label="закрыть"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button class="nav prev" aria-label="предыдущая"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="nav next" aria-label="следующая"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>`;
 
 ROOT.innerHTML = html;
 
@@ -489,9 +489,20 @@ addEventListener('pointermove', e => {
 
 /* ---------- крупный просмотр ---------- */
 const box = ROOT.querySelector('.al-box'), bimg = box.querySelector('img');
+// листание: картинки одной вкладки (процесс, задача) или одного раздела — стрелками, клавишами ← → и смахиванием
+let group = [], gi = 0;
+const show = i => {
+  gi = (i + group.length) % group.length; const f = group[gi];
+  bimg.src = f.dataset.full;
+  box.classList.toggle('wide', parseFloat(f.style.getPropertyValue('--r')) > 1.4);
+};
 ROOT.addEventListener('click', e => {
   const f = e.target.closest('.al-ph.zoom');
   if (!f) return;
+  const scope = f.closest('.al-fold-body') || f.closest('section') || ROOT;
+  const inFold = !!f.closest('.al-fold-body');
+  group = [...scope.querySelectorAll('.al-ph.zoom')].filter(x => x.offsetParent && (inFold || !x.closest('.al-fold-body')));
+  gi = Math.max(0, group.indexOf(f)); box.classList.toggle('many', group.length > 1);
   bimg.src = f.dataset.full; box.hidden = false; requestAnimationFrame(() => box.classList.add('on'));
   document.documentElement.style.overflow = 'hidden';
   // широкая картинка на телефоне: значок «поверните телефон»; где можно (Android) — сразу на весь экран горизонтально
@@ -505,8 +516,24 @@ const close = () => {
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   setTimeout(() => { box.hidden = true; bimg.removeAttribute('src'); }, 300);
 };
-box.addEventListener('click', close);
-addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) close(); });
+box.addEventListener('click', e => {
+  const n = e.target.closest('.nav');
+  if (n) { e.stopPropagation(); show(gi + (n.classList.contains('next') ? 1 : -1)); return; }
+  close();
+});
+addEventListener('keydown', e => {
+  if (box.hidden) return;
+  if (e.key === 'Escape') close();
+  else if (group.length > 1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { e.preventDefault(); show(gi + (e.key === 'ArrowRight' ? 1 : -1)); }
+});
+let sx = null;
+box.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+box.addEventListener('touchend', e => {
+  if (sx === null || group.length < 2) return;
+  const dx = e.changedTouches[0].clientX - sx; sx = null;
+  if (Math.abs(dx) > 50) { show(gi + (dx < 0 ? 1 : -1)); box.dataset.swiped = '1'; setTimeout(() => delete box.dataset.swiped, 400); }
+}, { passive: true });
+box.addEventListener('click', e => { if (box.dataset.swiped) e.stopImmediatePropagation(); }, true);
 
 /* ---------- ссылки по странице (#v1, #faq…): прокрутка кодом. На сайте стоит <base href> на jsDelivr,
    и обычный переход по #якорю увел бы на адрес base, а не по странице ---------- */
